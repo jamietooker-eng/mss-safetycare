@@ -1,1692 +1,1813 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Safety Care Training — Mid-Step Services</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
-  <style>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Safety Care Training — Mid-Step Services</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <style>
     :root {
-      --navy:       #0d1f3c;
-      --navy-mid:   #1a3560;
-      --navy-light: #254a84;
-      --teal:       #00bdb4;
-      --teal-dark:  #009990;
-      --teal-glow:  rgba(0,189,180,0.18);
-      --amber:      #f59e0b;
-      --amber-bg:   #fffbeb;
-      --red:        #ef4444;
-      --red-bg:     #fef2f2;
-      --green:      #22c55e;
-      --green-bg:   #f0fdf4;
-      --white:      #ffffff;
-      --gray-50:    #f8fafc;
-      --gray-100:   #f1f5f9;
-      --gray-200:   #e2e8f0;
-      --gray-400:   #94a3b8;
-      --gray-600:   #475569;
-      --gray-700:   #334155;
-      --gray-900:   #0f172a;
-      --shadow-sm:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
-      --shadow-md:  0 4px 16px rgba(13,31,60,0.12), 0 2px 6px rgba(13,31,60,0.08);
-      --shadow-lg:  0 10px 40px rgba(13,31,60,0.18), 0 4px 12px rgba(13,31,60,0.10);
-      --radius:     14px;
-      --radius-sm:  8px;
+        --navy: #0d1f3c;
+        --navy-mid: #1a3560;
+        --navy-light: #254a84;
+        --teal: #00bdb4;
+        --teal-dark: #009990;
+        --teal-glow: rgba(0, 189, 180, 0.18);
+        --amber: #f59e0b;
+        --amber-bg: #fffbeb;
+        --red: #ef4444;
+        --red-bg: #fef2f2;
+        --green: #22c55e;
+        --green-bg: #f0fdf4;
+        --white: #ffffff;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-400: #94a3b8;
+        --gray-600: #475569;
+        --gray-700: #334155;
+        --gray-900: #0f172a;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 4px 16px rgba(13, 31, 60, 0.12), 0 2px 6px rgba(13, 31, 60, 0.08);
+        --shadow-lg: 0 10px 40px rgba(13, 31, 60, 0.18), 0 4px 12px rgba(13, 31, 60, 0.10);
+        --radius: 14px;
+        --radius-sm: 8px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
     body {
-      font-family: 'Nunito', sans-serif;
-      background: var(--gray-50);
-      color: var(--gray-900);
-      min-height: 100vh;
+        font-family: 'Nunito', sans-serif;
+        background: var(--gray-50);
+        color: var(--gray-900);
+        min-height: 100vh;
     }
 
-    /* ─── HEADER ─────────────────────────────────── */
     header {
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, var(--navy-light) 100%);
-      padding: 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, var(--navy-light) 100%);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .header-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 28px 10px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 28px 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
     }
 
     .brand-logo {
-      width: 48px;
-      height: 48px;
-      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      box-shadow: 0 0 16px rgba(0,189,180,0.4);
-      flex-shrink: 0;
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        box-shadow: 0 0 16px rgba(0, 189, 180, 0.4);
+        flex-shrink: 0;
     }
 
     .brand-text h1 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 19px;
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: -0.3px;
-      line-height: 1.1;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 19px;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: -0.3px;
+        line-height: 1.1;
     }
 
     .brand-text p {
-      font-size: 11px;
-      color: rgba(255,255,255,0.55);
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-top: 2px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.55);
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-top: 2px;
     }
 
     .header-badge {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 50px;
-      padding: 6px 14px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .header-badge img {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 50px;
+        padding: 6px 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .header-badge span {
-      font-size: 12px;
-      font-weight: 700;
-      color: rgba(255,255,255,0.8);
+        font-size: 12px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.8);
     }
 
-    /* ─── TABS NAV ───────────────────────────────── */
+    .live-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--teal);
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 6px;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: 0.5;
+            transform: scale(0.8);
+        }
+    }
+
     .tabs-nav {
-      display: flex;
-      padding: 0 20px;
+        display: flex;
+        padding: 0 20px;
     }
 
     .tab-btn {
-      flex: 1;
-      background: none;
-      border: none;
-      color: rgba(255,255,255,0.5);
-      font-family: 'Nunito', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 12px 10px;
-      cursor: pointer;
-      position: relative;
-      transition: color 0.2s;
-      letter-spacing: 0.3px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
+        flex: 1;
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.5);
+        font-family: 'Nunito', sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 12px 10px;
+        cursor: pointer;
+        position: relative;
+        transition: color 0.2s;
+        letter-spacing: 0.3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
     }
 
     .tab-btn::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 15%;
-      right: 15%;
-      height: 3px;
-      background: var(--teal);
-      border-radius: 3px 3px 0 0;
-      opacity: 0;
-      transition: opacity 0.2s;
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 15%;
+        right: 15%;
+        height: 3px;
+        background: var(--teal);
+        border-radius: 3px 3px 0 0;
+        opacity: 0;
+        transition: opacity 0.2s;
     }
 
     .tab-btn.active {
-      color: #fff;
+        color: #fff;
     }
 
     .tab-btn.active::after {
-      opacity: 1;
+        opacity: 1;
     }
 
-    /* ─── MAIN CONTENT ───────────────────────────── */
     main {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 28px 20px 60px;
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 28px 20px 60px;
     }
 
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; animation: fadeUp 0.3s ease; }
+    .tab-panel {
+        display: none;
+    }
+
+    .tab-panel.active {
+        display: block;
+        animation: fadeUp 0.3s ease;
+    }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
-    /* ─── PAGE TITLE ─────────────────────────────── */
+    .loading-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .spinner {
+        width: 44px;
+        height: 44px;
+        border: 4px solid var(--gray-200);
+        border-top-color: var(--teal);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: 0 auto 18px;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loading-state p {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--gray-600);
+    }
+
     .page-title {
-      margin-bottom: 22px;
+        margin-bottom: 22px;
     }
 
     .page-title h2 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 26px;
-      font-weight: 900;
-      color: var(--navy);
-      letter-spacing: -0.5px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 26px;
+        font-weight: 900;
+        color: var(--navy);
+        letter-spacing: -0.5px;
     }
 
     .page-title p {
-      font-size: 14px;
-      color: var(--gray-600);
-      margin-top: 4px;
-      font-weight: 600;
+        font-size: 14px;
+        color: var(--gray-600);
+        margin-top: 4px;
+        font-weight: 600;
     }
 
-    /* ─── ALERT BANNERS ──────────────────────────── */
     .alert {
-      border-radius: var(--radius-sm);
-      padding: 14px 18px;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      border-left: 4px solid;
+        border-radius: var(--radius-sm);
+        padding: 14px 18px;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        border-left: 4px solid;
     }
 
-    .alert-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .alert-icon {
+        font-size: 20px;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
 
     .alert-amber {
-      background: var(--amber-bg);
-      border-color: var(--amber);
+        background: var(--amber-bg);
+        border-color: var(--amber);
     }
 
     .alert-red {
-      background: var(--red-bg);
-      border-color: var(--red);
+        background: var(--red-bg);
+        border-color: var(--red);
     }
 
     .alert strong {
-      display: block;
-      font-size: 13.5px;
-      font-weight: 800;
-      margin-bottom: 3px;
+        display: block;
+        font-size: 13.5px;
+        font-weight: 800;
+        margin-bottom: 3px;
     }
 
-    .alert-amber strong { color: #92400e; }
-    .alert-red strong   { color: #991b1b; }
+    .alert-amber strong {
+        color: #92400e;
+    }
+
+    .alert-red strong {
+        color: #991b1b;
+    }
 
     .alert p {
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1.5;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.5;
     }
 
-    .alert-amber p { color: #78350f; }
-    .alert-red p   { color: #7f1d1d; }
+    .alert-amber p {
+        color: #78350f;
+    }
+
+    .alert-red p {
+        color: #7f1d1d;
+    }
 
     .alert-red em {
-      font-style: italic;
-      font-weight: 700;
+        font-style: italic;
+        font-weight: 700;
     }
 
-    /* ─── SESSION CARDS ──────────────────────────── */
     .sessions-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 26px 0 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 26px 0 14px;
     }
 
     .sessions-header h3 {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--navy);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--navy);
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .session-count {
-      background: var(--teal);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 3px 9px;
-      border-radius: 50px;
+        background: var(--teal);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 3px 9px;
+        border-radius: 50px;
     }
 
     .session-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--gray-200);
-      display: flex;
-      align-items: stretch;
-      overflow: hidden;
-      margin-bottom: 12px;
-      transition: box-shadow 0.2s, transform 0.2s;
+        background: var(--white);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--gray-200);
+        display: flex;
+        align-items: stretch;
+        overflow: hidden;
+        margin-bottom: 12px;
+        transition: box-shadow 0.2s, transform 0.2s;
     }
 
     .session-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
     }
 
     .session-card.full {
-      opacity: 0.75;
+        opacity: 0.75;
     }
 
     .date-block {
-      background: linear-gradient(160deg, var(--navy-mid), var(--navy));
-      color: #fff;
-      padding: 20px 18px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-width: 88px;
-      text-align: center;
+        background: linear-gradient(160deg, var(--navy-mid), var(--navy));
+        color: #fff;
+        padding: 20px 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-width: 88px;
+        text-align: center;
     }
 
     .date-month {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 4px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 4px;
     }
 
     .date-day {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 36px;
-      font-weight: 900;
-      line-height: 1;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 36px;
+        font-weight: 900;
+        line-height: 1;
     }
 
     .date-weekday {
-      font-size: 11px;
-      font-weight: 700;
-      color: rgba(255,255,255,0.5);
-      margin-top: 4px;
-      letter-spacing: 0.5px;
+        font-size: 11px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 4px;
+        letter-spacing: 0.5px;
     }
 
     .session-info {
-      flex: 1;
-      padding: 18px 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 6px;
+        flex: 1;
+        padding: 18px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 6px;
     }
 
     .session-title {
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--navy);
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--navy);
     }
 
     .session-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
     }
 
     .meta-item {
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--gray-600);
-      display: flex;
-      align-items: center;
-      gap: 5px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--gray-600);
+        display: flex;
+        align-items: center;
+        gap: 5px;
     }
 
     .session-trainers {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--navy-light);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--navy-light);
     }
 
     .session-actions {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      justify-content: center;
-      gap: 10px;
-      padding: 18px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 10px;
+        padding: 18px 20px;
     }
 
     .status-badge {
-      font-size: 11px;
-      font-weight: 800;
-      padding: 4px 10px;
-      border-radius: 50px;
-      letter-spacing: 0.3px;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 4px 10px;
+        border-radius: 50px;
+        letter-spacing: 0.3px;
     }
 
-    .status-open  { background: var(--green-bg);  color: #15803d; }
-    .status-full  { background: var(--red-bg);    color: #dc2626; }
+    .status-open {
+        background: var(--green-bg);
+        color: #15803d;
+    }
+
+    .status-full {
+        background: var(--red-bg);
+        color: #dc2626;
+    }
 
     .capacity-text {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--gray-600);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--gray-600);
     }
 
-    /* ─── BUTTONS ────────────────────────────────── */
-    .btn {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-      font-size: 13px;
-      border: none;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      padding: 9px 18px;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      text-decoration: none;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(0,189,180,0.3);
-    }
-
-    .btn-primary:hover {
-      box-shadow: 0 6px 18px rgba(0,189,180,0.45);
-      transform: translateY(-1px);
-    }
-
-    .btn-primary:disabled {
-      background: var(--gray-200);
-      color: var(--gray-400);
-      box-shadow: none;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--navy);
-      border: 2px solid var(--gray-200);
-    }
-
-    .btn-outline:hover {
-      border-color: var(--navy);
-      background: var(--gray-50);
-    }
-
-    .btn-danger {
-      background: #fee2e2;
-      color: #dc2626;
-    }
-
-    .btn-danger:hover {
-      background: #fecaca;
-    }
-
-    .btn-navy {
-      background: var(--navy);
-      color: #fff;
-    }
-
-    .btn-navy:hover {
-      background: var(--navy-mid);
-    }
-
-    .btn-sm {
-      font-size: 12px;
-      padding: 6px 12px;
-    }
-
-    /* ─── EMPTY STATE ────────────────────────────── */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-    }
-
-    .empty-icon {
-      font-size: 52px;
-      margin-bottom: 16px;
-    }
-
-    .empty-state h3 {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--navy);
-      margin-bottom: 8px;
-    }
-
-    .empty-state p {
-      font-size: 14px;
-      color: var(--gray-600);
-      font-weight: 600;
-    }
-
-    /* ─── MY SIGN-UPS ────────────────────────────── */
-    .signup-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      border: 1px solid var(--gray-200);
-      box-shadow: var(--shadow-sm);
-      padding: 20px 22px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      transition: box-shadow 0.2s;
-    }
-
-    .signup-card:hover {
-      box-shadow: var(--shadow-md);
-    }
-
-    .signup-card-left {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .signup-date-pill {
-      background: linear-gradient(135deg, var(--navy-mid), var(--navy));
-      color: #fff;
-      border-radius: 10px;
-      padding: 10px 14px;
-      text-align: center;
-      min-width: 64px;
-    }
-
-    .signup-date-pill .month {
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--teal);
-    }
-
-    .signup-date-pill .day {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 24px;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .signup-info h4 {
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--navy);
-    }
-
-    .signup-info p {
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--gray-600);
-      margin-top: 3px;
-    }
-
-    .signup-info .cert-badge {
-      display: inline-block;
-      margin-top: 5px;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 2px 8px;
-      border-radius: 50px;
-      background: #eff6ff;
-      color: #1d4ed8;
-    }
-
-    /* ─── MODAL ──────────────────────────────────── */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(9,20,42,0.6);
-      backdrop-filter: blur(4px);
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .modal-overlay.open {
-      display: flex;
-      animation: fadeIn 0.2s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-
-    .modal {
-      background: var(--white);
-      border-radius: 18px;
-      box-shadow: var(--shadow-lg);
-      width: 100%;
-      max-width: 480px;
-      animation: slideUp 0.25s ease;
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .modal-header {
-      background: linear-gradient(135deg, var(--navy), var(--navy-mid));
-      padding: 22px 26px 20px;
-      border-radius: 18px 18px 0 0;
-      color: #fff;
-    }
-
-    .modal-header h3 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 18px;
-      font-weight: 900;
-    }
-
-    .modal-header p {
-      font-size: 13px;
-      color: rgba(255,255,255,0.6);
-      margin-top: 4px;
-      font-weight: 600;
-    }
-
-    .modal-body {
-      padding: 24px 26px;
-    }
-
-    .form-group {
-      margin-bottom: 18px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 13px;
-      font-weight: 800;
-      color: var(--gray-700);
-      margin-bottom: 7px;
-      letter-spacing: 0.2px;
-    }
-
-    .form-group label span {
-      color: var(--red);
-    }
-
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 11px 14px;
-      border: 2px solid var(--gray-200);
-      border-radius: var(--radius-sm);
-      font-family: 'Nunito', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--gray-900);
-      background: var(--gray-50);
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
-      appearance: none;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: var(--teal);
-      box-shadow: 0 0 0 3px var(--teal-glow);
-      background: #fff;
-    }
-
-    .form-error {
-      font-size: 12px;
-      color: var(--red);
-      font-weight: 700;
-      margin-top: 6px;
-      display: none;
-    }
-
-    .form-error.show { display: block; }
-
-    .modal-footer {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-      padding: 0 26px 24px;
-    }
-
-    /* ─── ADMIN ──────────────────────────────────── */
-    .admin-login {
-      max-width: 420px;
-      margin: 60px auto;
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-md);
-      overflow: hidden;
-    }
-
-    .admin-login-header {
-      background: linear-gradient(135deg, var(--navy), var(--navy-mid));
-      padding: 30px 28px 28px;
-      text-align: center;
-      color: #fff;
-    }
-
-    .admin-login-header .lock-icon {
-      font-size: 36px;
-      margin-bottom: 12px;
-    }
-
-    .admin-login-header h3 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 20px;
-      font-weight: 900;
-    }
-
-    .admin-login-header p {
-      font-size: 13px;
-      color: rgba(255,255,255,0.55);
-      margin-top: 5px;
-      font-weight: 600;
-    }
-
-    .admin-login-body {
-      padding: 28px;
-    }
-
-    .admin-error {
-      background: var(--red-bg);
-      color: #dc2626;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
-      margin-bottom: 14px;
-      border: 1px solid #fecaca;
-      display: none;
-    }
-
-    .admin-error.show { display: block; }
-
-    .admin-dashboard { animation: fadeUp 0.3s ease; }
-
-    .admin-section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-    }
-
-    .admin-section-header h3 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 18px;
-      font-weight: 900;
-      color: var(--navy);
-    }
-
-    .admin-top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .admin-top-bar h2 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 22px;
-      font-weight: 900;
-      color: var(--navy);
-    }
-
-    /* ─── ROSTER VIEW ────────────────────────────── */
-    .roster-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .roster-header h3 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 18px;
-      font-weight: 900;
-      color: var(--navy);
-      flex: 1;
-    }
-
-    .roster-table-wrap {
-      overflow-x: auto;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--gray-200);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    thead { background: var(--navy); }
-
-    thead th {
-      padding: 13px 16px;
-      text-align: left;
-      font-size: 11.5px;
-      font-weight: 800;
-      color: rgba(255,255,255,0.85);
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-    }
-
-    tbody tr {
-      border-bottom: 1px solid var(--gray-100);
-      transition: background 0.15s;
-    }
-
-    tbody tr:last-child { border-bottom: none; }
-
-    tbody tr:hover { background: var(--gray-50); }
-
-    tbody td {
-      padding: 12px 16px;
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--gray-700);
-    }
-
-    .td-name { font-weight: 800; color: var(--navy); }
-
-    .td-cert {
-      font-size: 11px;
-      font-weight: 800;
-      padding: 3px 9px;
-      border-radius: 50px;
-    }
-
-    .cert-initial { background: #eff6ff; color: #1d4ed8; }
-    .cert-recert  { background: #f0fdf4; color: #15803d; }
-
-    /* ─── ADD SESSION FORM ───────────────────────── */
-    .add-session-panel {
-      background: var(--white);
-      border-radius: var(--radius);
-      border: 1px solid var(--gray-200);
-      box-shadow: var(--shadow-sm);
-      padding: 24px;
-      margin-bottom: 24px;
-      display: none;
-    }
-
-    .add-session-panel.open { display: block; animation: fadeUp 0.25s ease; }
-
-    .add-session-panel h4 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 16px;
-      font-weight: 900;
-      color: var(--navy);
-      margin-bottom: 18px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    @media (max-width: 540px) {
-      .form-row { grid-template-columns: 1fr; }
-    }
-
-    /* ─── PRINT ──────────────────────────────────── */
-    @media print {
-      header, .tabs-nav, .btn, .admin-top-bar { display: none !important; }
-      .roster-table-wrap { border: none; }
-      body { background: white; }
-      .print-header {
-        display: flex !important;
-        align-items: center;
-        gap: 14px;
-        margin-bottom: 20px;
-        border-bottom: 3px solid #0d1f3c;
-        padding-bottom: 14px;
-      }
-    }
-
-    .print-header { display: none; }
-
-    /* ─── SEARCH BOX ─────────────────────────────── */
-    .search-box {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--white);
-      border: 2px solid var(--gray-200);
-      border-radius: var(--radius-sm);
-      padding: 9px 14px;
-      margin-bottom: 20px;
-      transition: border-color 0.2s;
-    }
-
-    .search-box:focus-within {
-      border-color: var(--teal);
-      box-shadow: 0 0 0 3px var(--teal-glow);
-    }
-
-    .search-box input {
-      border: none;
-      background: none;
-      font-family: 'Nunito', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--gray-900);
-      outline: none;
-      flex: 1;
-    }
-
-    /* ─── SESSION LIST (admin) ───────────────────── */
-    .admin-session-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      border: 1px solid var(--gray-200);
-      box-shadow: var(--shadow-sm);
-      padding: 18px 22px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .admin-session-info h4 {
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--navy);
-    }
-
-    .admin-session-info p {
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--gray-600);
-      margin-top: 4px;
-    }
-
-    .admin-session-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    /* ─── FOOTER ─────────────────────────────────── */
-    footer {
-      background: var(--navy);
-      color: rgba(255,255,255,0.45);
-      text-align: center;
-      padding: 22px 20px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    footer span { color: rgba(255,255,255,0.7); }
-
-    /* ─── TOAST ──────────────────────────────────── */
-    .toast-container {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .toast {
-      background: var(--navy);
-      color: #fff;
-      font-size: 13.5px;
-      font-weight: 700;
-      padding: 13px 18px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 240px;
-      animation: slideInRight 0.3s ease;
-    }
-
-    .toast.success { border-left: 4px solid var(--teal); }
-    .toast.error   { border-left: 4px solid var(--red); }
-
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(30px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
-
-    /* ─── RESPONSIVE ─────────────────────────────── */
-    @media (max-width: 600px) {
-      .header-top { padding: 12px 16px 8px; }
-      .brand-text h1 { font-size: 16px; }
-      main { padding: 20px 14px 50px; }
-      .session-card { flex-direction: column; }
-      .date-block { flex-direction: row; gap: 12px; padding: 14px 20px; }
-      .date-day { font-size: 28px; }
-      .session-actions { flex-direction: row; padding: 0 18px 18px; justify-content: space-between; }
-    }
-
-    /* ─── DIVIDER ────────────────────────────────── */
-    .divider {
-      height: 1px;
-      background: var(--gray-200);
-      margin: 24px 0;
-    }
-
-    /* ─── CAPACITY BAR ───────────────────────────── */
     .capacity-bar-wrap {
-      margin-top: 6px;
+        margin-top: 6px;
     }
 
     .capacity-bar {
-      height: 4px;
-      background: var(--gray-200);
-      border-radius: 4px;
-      overflow: hidden;
+        height: 4px;
+        background: var(--gray-200);
+        border-radius: 4px;
+        overflow: hidden;
     }
 
     .capacity-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--teal), var(--teal-dark));
-      border-radius: 4px;
-      transition: width 0.4s ease;
+        height: 100%;
+        background: linear-gradient(90deg, var(--teal), var(--teal-dark));
+        border-radius: 4px;
+        transition: width 0.4s ease;
     }
 
-    .capacity-fill.warn  { background: linear-gradient(90deg, var(--amber), #d97706); }
-    .capacity-fill.danger{ background: linear-gradient(90deg, var(--red), #b91c1c); }
-  </style>
+    .capacity-fill.warn {
+        background: linear-gradient(90deg, var(--amber), #d97706);
+    }
+
+    .capacity-fill.danger {
+        background: linear-gradient(90deg, var(--red), #b91c1c);
+    }
+
+    .btn {
+        font-family: 'Nunito', sans-serif;
+        font-weight: 800;
+        font-size: 13px;
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        padding: 9px 18px;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(0, 189, 180, 0.3);
+    }
+
+    .btn-primary:hover {
+        box-shadow: 0 6px 18px rgba(0, 189, 180, 0.45);
+        transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+        background: var(--gray-200);
+        color: var(--gray-400);
+        box-shadow: none;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .btn-outline {
+        background: transparent;
+        color: var(--navy);
+        border: 2px solid var(--gray-200);
+    }
+
+    .btn-outline:hover {
+        border-color: var(--navy);
+        background: var(--gray-50);
+    }
+
+    .btn-danger {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .btn-danger:hover {
+        background: #fecaca;
+    }
+
+    .btn-navy {
+        background: var(--navy);
+        color: #fff;
+    }
+
+    .btn-navy:hover {
+        background: var(--navy-mid);
+    }
+
+    .btn-sm {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-icon {
+        font-size: 52px;
+        margin-bottom: 16px;
+    }
+
+    .empty-state h3 {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--navy);
+        margin-bottom: 8px;
+    }
+
+    .empty-state p {
+        font-size: 14px;
+        color: var(--gray-600);
+        font-weight: 600;
+    }
+
+    .signup-card {
+        background: var(--white);
+        border-radius: var(--radius);
+        border: 1px solid var(--gray-200);
+        box-shadow: var(--shadow-sm);
+        padding: 20px 22px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        transition: box-shadow 0.2s;
+    }
+
+    .signup-card:hover {
+        box-shadow: var(--shadow-md);
+    }
+
+    .signup-card-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .signup-date-pill {
+        background: linear-gradient(135deg, var(--navy-mid), var(--navy));
+        color: #fff;
+        border-radius: 10px;
+        padding: 10px 14px;
+        text-align: center;
+        min-width: 64px;
+    }
+
+    .signup-date-pill .month {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--teal);
+    }
+
+    .signup-date-pill .day {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 24px;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .signup-info h4 {
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--navy);
+    }
+
+    .signup-info p {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--gray-600);
+        margin-top: 3px;
+    }
+
+    .cert-badge {
+        display: inline-block;
+        margin-top: 5px;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 2px 8px;
+        border-radius: 50px;
+        background: #eff6ff;
+        color: #1d4ed8;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(9, 20, 42, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .modal-overlay.open {
+        display: flex;
+        animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .modal {
+        background: var(--white);
+        border-radius: 18px;
+        box-shadow: var(--shadow-lg);
+        width: 100%;
+        max-width: 480px;
+        animation: slideUp 0.25s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+        padding: 22px 26px 20px;
+        border-radius: 18px 18px 0 0;
+        color: #fff;
+    }
+
+    .modal-header h3 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 18px;
+        font-weight: 900;
+    }
+
+    .modal-header p {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 4px;
+        font-weight: 600;
+    }
+
+    .modal-body {
+        padding: 24px 26px;
+    }
+
+    .modal-footer {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        padding: 0 26px 24px;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--gray-700);
+        margin-bottom: 7px;
+        letter-spacing: 0.2px;
+    }
+
+    .form-group label span {
+        color: var(--red);
+    }
+
+    .form-group input, .form-group select {
+        width: 100%;
+        padding: 11px 14px;
+        border: 2px solid var(--gray-200);
+        border-radius: var(--radius-sm);
+        font-family: 'Nunito', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--gray-900);
+        background: var(--gray-50);
+        transition: border-color 0.2s, box-shadow 0.2s;
+        outline: none;
+        appearance: none;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+        border-color: var(--teal);
+        box-shadow: 0 0 0 3px var(--teal-glow);
+        background: #fff;
+    }
+
+    .form-error {
+        font-size: 12px;
+        color: var(--red);
+        font-weight: 700;
+        margin-top: 6px;
+        display: none;
+    }
+
+    .form-error.show {
+        display: block;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+
+    @media (max-width: 540px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .admin-login {
+        max-width: 420px;
+        margin: 60px auto;
+        background: var(--white);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+    }
+
+    .admin-login-header {
+        background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+        padding: 30px 28px 28px;
+        text-align: center;
+        color: #fff;
+    }
+
+    .admin-login-header .lock-icon {
+        font-size: 36px;
+        margin-bottom: 12px;
+    }
+
+    .admin-login-header h3 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 20px;
+        font-weight: 900;
+    }
+
+    .admin-login-header p {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.55);
+        margin-top: 5px;
+        font-weight: 600;
+    }
+
+    .admin-login-body {
+        padding: 28px;
+    }
+
+    .admin-error {
+        background: var(--red-bg);
+        color: #dc2626;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 10px 14px;
+        border-radius: var(--radius-sm);
+        margin-bottom: 14px;
+        border: 1px solid #fecaca;
+        display: none;
+    }
+
+    .admin-error.show {
+        display: block;
+    }
+
+    .admin-dashboard {
+        animation: fadeUp 0.3s ease;
+    }
+
+    .admin-top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .admin-top-bar h2 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--navy);
+    }
+
+    .add-session-panel {
+        background: var(--white);
+        border-radius: var(--radius);
+        border: 1px solid var(--gray-200);
+        box-shadow: var(--shadow-sm);
+        padding: 24px;
+        margin-bottom: 24px;
+        display: none;
+    }
+
+    .add-session-panel.open {
+        display: block;
+        animation: fadeUp 0.25s ease;
+    }
+
+    .add-session-panel h4 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 16px;
+        font-weight: 900;
+        color: var(--navy);
+        margin-bottom: 18px;
+    }
+
+    .admin-session-card {
+        background: var(--white);
+        border-radius: var(--radius);
+        border: 1px solid var(--gray-200);
+        box-shadow: var(--shadow-sm);
+        padding: 18px 22px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .admin-session-info h4 {
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--navy);
+    }
+
+    .admin-session-info p {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--gray-600);
+        margin-top: 4px;
+    }
+
+    .admin-session-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .roster-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .roster-header h3 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 18px;
+        font-weight: 900;
+        color: var(--navy);
+        flex: 1;
+    }
+
+    .roster-table-wrap {
+        overflow-x: auto;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--gray-200);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: var(--navy);
+    }
+
+    thead th {
+        padding: 13px 16px;
+        text-align: left;
+        font-size: 11.5px;
+        font-weight: 800;
+        color: rgba(255, 255, 255, 0.85);
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+    }
+
+    tbody tr {
+        border-bottom: 1px solid var(--gray-100);
+        transition: background 0.15s;
+    }
+
+    tbody tr:last-child {
+        border-bottom: none;
+    }
+
+    tbody tr:hover {
+        background: var(--gray-50);
+    }
+
+    tbody td {
+        padding: 12px 16px;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: var(--gray-700);
+    }
+
+    .td-name {
+        font-weight: 800;
+        color: var(--navy);
+    }
+
+    .td-cert {
+        font-size: 11px;
+        font-weight: 800;
+        padding: 3px 9px;
+        border-radius: 50px;
+    }
+
+    .cert-initial {
+        background: #eff6ff;
+        color: #1d4ed8;
+    }
+
+    .cert-recert {
+        background: #f0fdf4;
+        color: #15803d;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--white);
+        border: 2px solid var(--gray-200);
+        border-radius: var(--radius-sm);
+        padding: 9px 14px;
+        margin-bottom: 20px;
+        transition: border-color 0.2s;
+    }
+
+    .search-box:focus-within {
+        border-color: var(--teal);
+        box-shadow: 0 0 0 3px var(--teal-glow);
+    }
+
+    .search-box input {
+        border: none;
+        background: none;
+        font-family: 'Nunito', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--gray-900);
+        outline: none;
+        flex: 1;
+    }
+
+    .toast-container {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .toast {
+        background: var(--navy);
+        color: #fff;
+        font-size: 13.5px;
+        font-weight: 700;
+        padding: 13px 18px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 240px;
+        animation: slideInRight 0.3s ease;
+    }
+
+    .toast.success {
+        border-left: 4px solid var(--teal);
+    }
+
+    .toast.error {
+        border-left: 4px solid var(--red);
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    footer {
+        background: var(--navy);
+        color: rgba(255, 255, 255, 0.45);
+        text-align: center;
+        padding: 22px 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    footer span {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    @media print {
+        header, .tabs-nav, .btn, .admin-top-bar {
+            display: none !important;
+        }
+
+        .roster-table-wrap {
+            border: none;
+        }
+
+        body {
+            background: white;
+        }
+
+        .print-header {
+            display: block !important;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #0d1f3c;
+            padding-bottom: 14px;
+        }
+    }
+
+    .print-header {
+        display: none;
+    }
+
+    @media (max-width: 600px) {
+        .header-top {
+            padding: 12px 16px 8px;
+        }
+
+        .brand-text h1 {
+            font-size: 16px;
+        }
+
+        main {
+            padding: 20px 14px 50px;
+        }
+
+        .session-card {
+            flex-direction: column;
+        }
+
+        .date-block {
+            flex-direction: row;
+            gap: 12px;
+            padding: 14px 20px;
+        }
+
+        .date-day {
+            font-size: 28px;
+        }
+
+        .session-actions {
+            flex-direction: row;
+            padding: 0 18px 18px;
+            justify-content: space-between;
+        }
+    }
+    </style>
 </head>
 <body>
-
-<!-- ─── HEADER ─────────────────────────────────── -->
-<header>
-  <div class="header-top">
-    <div class="brand">
-      <div class="brand-logo">🛡️</div>
-      <div class="brand-text">
-        <h1>Mid-Step Services</h1>
-        <p>Enhancing Abilities… Enriching Lives</p>
-      </div>
-    </div>
-    <div class="header-badge">
-      <span>Safety-Care® by QBS</span>
-    </div>
-  </div>
-  <div class="tabs-nav">
-    <button class="tab-btn active" onclick="switchTab('home')" id="tab-home">🏠 Home</button>
-    <button class="tab-btn" onclick="switchTab('mysignups')" id="tab-mysignups">📋 My Sign-Ups</button>
-    <button class="tab-btn" onclick="switchTab('admin')" id="tab-admin">🔐 Admin</button>
-  </div>
-</header>
-
-<!-- ─── MAIN ───────────────────────────────────── -->
-<main>
-
-  <!-- HOME TAB -->
-  <div class="tab-panel active" id="panel-home">
-    <div class="page-title">
-      <h2>2026 Training Schedule</h2>
-      <p>Safety Care Certification — select a session to register</p>
-    </div>
-
-    <div class="alert alert-amber">
-      <div class="alert-icon">⚠️</div>
-      <div>
-        <strong>Arrive Early — Start Promptly at 8:30 AM</strong>
-        <p>The door will be locked shortly after 8:30 so trainers can start on time.</p>
-      </div>
-    </div>
-
-    <div class="alert alert-red">
-      <div class="alert-icon">👟</div>
-      <div>
-        <strong>Dress Code Required</strong>
-        <p>Tennis shoes or low-heeled shoes ONLY. No sandals, slippers, or open-toe shoes. Loose-fitting / athletic wear recommended. <em>Improper footwear = asked to leave.</em></p>
-      </div>
-    </div>
-
-    <div class="sessions-header">
-      <h3>📅 Upcoming Sessions <span class="session-count" id="open-count">—</span></h3>
-    </div>
-
-    <div id="session-list"></div>
-  </div>
-
-  <!-- MY SIGN-UPS TAB -->
-  <div class="tab-panel" id="panel-mysignups">
-    <div class="page-title">
-      <h2>My Sign-Ups</h2>
-      <p>Your registered Safety Care sessions</p>
-    </div>
-    <div class="search-box">
-      <span>🔍</span>
-      <input type="text" id="signup-search" placeholder="Search by name..." oninput="renderMySignups()" />
-    </div>
-    <div id="my-signups-list"></div>
-  </div>
-
-  <!-- ADMIN TAB -->
-  <div class="tab-panel" id="panel-admin">
-
-    <!-- Login -->
-    <div class="admin-login" id="admin-login-box">
-      <div class="admin-login-header">
-        <div class="lock-icon">🔐</div>
-        <h3>Admin Access</h3>
-        <p>Enter the admin password to manage sessions and view rosters.</p>
-      </div>
-      <div class="admin-login-body">
-        <div class="admin-error" id="admin-error">Incorrect password. Please try again.</div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="admin-pw-input" placeholder="Enter password..." onkeydown="if(event.key==='Enter') adminLogin()" />
-        </div>
-        <button class="btn btn-navy" style="width:100%;justify-content:center" onclick="adminLogin()">Log In →</button>
-      </div>
-    </div>
-
-    <!-- Dashboard -->
-    <div class="admin-dashboard" id="admin-dashboard" style="display:none">
-      <div class="admin-top-bar">
-        <h2>⚙️ Admin Dashboard</h2>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-primary" onclick="toggleAddSession()">＋ Add Session</button>
-          <button class="btn btn-outline btn-sm" onclick="adminLogout()">Log Out</button>
-        </div>
-      </div>
-
-      <!-- Add Session Form -->
-      <div class="add-session-panel" id="add-session-panel">
-        <h4>➕ New Training Session</h4>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Date <span>*</span></label>
-            <input type="date" id="ns-date" />
-          </div>
-          <div class="form-group">
-            <label>Time <span>*</span></label>
-            <input type="text" id="ns-time" value="8:30 AM – 5:00 PM" />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Trainer 1</label>
-            <select id="ns-trainer1">
-              <option value="">— None —</option>
-              <option>Lola</option><option>Joann</option><option>Thomas</option>
-              <option>Tammy</option><option>Harley</option><option>Leslie</option>
-              <option>Jaedyn</option><option>Lauren</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Trainer 2</label>
-            <select id="ns-trainer2">
-              <option value="">— None —</option>
-              <option>Lola</option><option>Joann</option><option>Thomas</option>
-              <option>Tammy</option><option>Harley</option><option>Leslie</option>
-              <option>Jaedyn</option><option>Lauren</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Location <span>*</span></label>
-            <input type="text" id="ns-location" value="Main Office Training Center" />
-          </div>
-          <div class="form-group">
-            <label>Max Capacity <span>*</span></label>
-            <input type="number" id="ns-capacity" value="20" min="1" max="100" />
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Notes (optional)</label>
-          <input type="text" id="ns-notes" placeholder="Any extra info for staff..." />
-        </div>
-        <div style="display:flex;gap:10px">
-          <button class="btn btn-primary" onclick="addSession()">Create Session</button>
-          <button class="btn btn-outline" onclick="toggleAddSession()">Cancel</button>
-        </div>
-      </div>
-
-      <!-- Session List / Roster View -->
-      <div id="admin-roster-view" style="display:none">
-        <div class="roster-header">
-          <button class="btn btn-outline btn-sm" onclick="closeRoster()">← Back</button>
-          <h3 id="roster-title">Session Roster</h3>
-          <button class="btn btn-outline btn-sm" onclick="printRoster()">🖨️ Print Roster</button>
-        </div>
-        <div class="print-header" id="print-header"></div>
-        <div class="roster-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Home / Facility</th>
-                <th>Status</th>
-                <th>Registered On</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="roster-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div id="admin-session-list"></div>
-    </div>
-
-  </div>
-
-</main>
-
-<!-- ─── REGISTER MODAL ─────────────────────────── -->
-<div class="modal-overlay" id="register-modal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Register for Training</h3>
-      <p id="modal-session-info">Safety Care Certification</p>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label>Full Name <span style="color:var(--red)">*</span></label>
-        <input type="text" id="reg-name" placeholder="Your full name..." />
-        <p class="form-error" id="err-name">Please enter your full name.</p>
-      </div>
-      <div class="form-group">
-        <label>Home / Facility <span style="color:var(--red)">*</span></label>
-        <select id="reg-facility">
-          <option value="">— Select your home / facility —</option>
-          <option>PKV</option><option>BV</option><option>Cherokee</option>
-          <option>Cheyenne</option><option>CH</option><option>Lawton</option>
-          <option>Leech</option><option>Maple View</option><option>Marshall</option>
-          <option>MWC</option><option>Southgate</option><option>So Maple</option>
-          <option>Pinnacle</option><option>Royce</option><option>Wescott</option>
-          <option>SH Apts</option><option>SH Duplex</option><option>St. Mary's</option>
-          <option>Stone Ridge</option><option>Riverside</option><option>Mulberry</option>
-        </select>
-        <p class="form-error" id="err-facility">Please select your facility.</p>
-      </div>
-      <div class="form-group">
-        <label>Certification Status <span style="color:var(--red)">*</span></label>
-        <select id="reg-cert">
-          <option value="">— Select status —</option>
-          <option>Initial</option>
-          <option>Recertification</option>
-        </select>
-        <p class="form-error" id="err-cert">Please select your certification status.</p>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="submitRegistration()">✓ Complete Registration</button>
-    </div>
-  </div>
-</div>
-
-<!-- ─── TOAST CONTAINER ───────────────────────── -->
-<div class="toast-container" id="toast-container"></div>
-
-<!-- ─── FOOTER ────────────────────────────────── -->
-<footer>
-  <span>Mid-Step Services</span> — Safety Care Certification Training Portal © 2026 &nbsp;·&nbsp; Sioux City, Iowa
-</footer>
-
-<script>
-  // ─── DATA ─────────────────────────────────────
-  const ADMIN_PASSWORD = 'MSS2026!';
-
-  const DEFAULT_SESSIONS = [
-    { id: 's1', date: '2026-04-21', time: '8:30 AM – 5:00 PM', location: 'Main Office Training Center', trainer1: '', trainer2: '', maxCapacity: 20, notes: '' },
-    { id: 's2', date: '2026-05-05', time: '8:30 AM – 5:00 PM', location: 'Main Office Training Center', trainer1: '', trainer2: '', maxCapacity: 20, notes: '' },
-    { id: 's3', date: '2026-05-20', time: '8:30 AM – 5:00 PM', location: 'Main Office Training Center', trainer1: '', trainer2: '', maxCapacity: 20, notes: '' },
-    { id: 's4', date: '2026-06-04', time: '8:30 AM – 5:00 PM', location: 'Main Office Training Center', trainer1: '', trainer2: '', maxCapacity: 20, notes: '' },
-    { id: 's5', date: '2026-06-17', time: '8:30 AM – 5:00 PM', location: 'Main Office Training Center', trainer1: '', trainer2: '', maxCapacity: 20, notes: '' },
-  ];
-
-  // ─── STATE ────────────────────────────────────
-  function getSessions() {
-    const saved = localStorage.getItem('mss_sessions');
-    return saved ? JSON.parse(saved) : DEFAULT_SESSIONS;
-  }
-
-  function saveSessions(sessions) {
-    localStorage.setItem('mss_sessions', JSON.stringify(sessions));
-  }
-
-  function getRegistrations() {
-    const saved = localStorage.getItem('mss_registrations');
-    return saved ? JSON.parse(saved) : [];
-  }
-
-  function saveRegistrations(regs) {
-    localStorage.setItem('mss_registrations', JSON.stringify(regs));
-  }
-
-  // ─── HELPERS ──────────────────────────────────
-  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const WEEKDAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-
-  function parseDate(str) {
-    const [y, m, d] = str.split('-').map(Number);
-    return new Date(y, m - 1, d);
-  }
-
-  function formatDateFull(str) {
-    const d = parseDate(str);
-    return `${WEEKDAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
-  }
-
-  function getMonth(str) { return MONTHS[parseDate(str).getMonth()]; }
-  function getDay(str)   { return parseDate(str).getDate(); }
-  function getWday(str)  { return WEEKDAYS[parseDate(str).getDay()]; }
-
-  function getRegistrationsForSession(sessionId) {
-    return getRegistrations().filter(r => r.sessionId === sessionId);
-  }
-
-  function isRegistered(sessionId) {
-    // Simple check by looking at last reg name stored
-    const name = localStorage.getItem('mss_my_name') || '';
-    if (!name) return false;
-    return getRegistrationsForSession(sessionId).some(r => r.name.toLowerCase() === name.toLowerCase());
-  }
-
-  // ─── TABS ─────────────────────────────────────
-  function switchTab(tab) {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('panel-' + tab).classList.add('active');
-    document.getElementById('tab-' + tab).classList.add('active');
-
-    if (tab === 'home')      renderSessions();
-    if (tab === 'mysignups') renderMySignups();
-    if (tab === 'admin')     renderAdminSessions();
-  }
-
-  // ─── HOME / SESSION LIST ───────────────────────
-  function renderSessions() {
-    const sessions = getSessions();
-    const container = document.getElementById('session-list');
-    const today = new Date(); today.setHours(0,0,0,0);
-
-    const upcoming = sessions.filter(s => {
-      const d = parseDate(s.date); d.setHours(0,0,0,0);
-      return d >= today;
-    }).sort((a,b) => a.date.localeCompare(b.date));
-
-    document.getElementById('open-count').textContent =
-      upcoming.filter(s => getRegistrationsForSession(s.id).length < s.maxCapacity).length + ' open';
-
-    if (upcoming.length === 0) {
-      container.innerHTML = `<div class="empty-state"><div class="empty-icon">📅</div><h3>No upcoming sessions</h3><p>Check back soon — new dates will be added!</p></div>`;
-      return;
-    }
-
-    container.innerHTML = upcoming.map(session => {
-      const regs = getRegistrationsForSession(session.id);
-      const count = regs.length;
-      const cap = session.maxCapacity;
-      const full = count >= cap;
-      const pct = Math.round((count / cap) * 100);
-      const barClass = pct >= 100 ? 'danger' : pct >= 75 ? 'warn' : '';
-      const trainers = [session.trainer1, session.trainer2].filter(Boolean).join(' & ');
-
-      return `
-        <div class="session-card${full ? ' full' : ''}">
-          <div class="date-block">
-            <div class="date-month">${getMonth(session.date)}</div>
-            <div class="date-day">${getDay(session.date)}</div>
-            <div class="date-weekday">${getWday(session.date)}</div>
-          </div>
-          <div class="session-info">
-            <div class="session-title">Safety Care Certification Training</div>
-            <div class="session-meta">
-              <span class="meta-item">⏰ ${session.time}</span>
-              <span class="meta-item">📍 ${session.location}</span>
+    <header>
+        <div class="header-top">
+            <div class="brand">
+                <div class="brand-logo">🛡️</div>
+                <div class="brand-text">
+                    <h1>Mid-Step Services</h1>
+                    <p>Enhancing Abilities… Enriching Lives</p>
+                </div>
             </div>
-            ${trainers ? `<div class="session-trainers">🧑‍🏫 Trainers: ${trainers}</div>` : ''}
-            ${session.notes ? `<div class="meta-item" style="font-style:italic;margin-top:2px">📝 ${session.notes}</div>` : ''}
-            <div class="capacity-bar-wrap">
-              <div class="capacity-bar"><div class="capacity-fill ${barClass}" style="width:${pct}%"></div></div>
+            <div class="header-badge">
+                <span class="live-dot"></span>
+                <span>Live · Safety-Care® by QBS</span>
             </div>
-          </div>
-          <div class="session-actions">
-            <span class="status-badge ${full ? 'status-full' : 'status-open'}">${full ? 'Full' : 'Open'}</span>
-            <span class="capacity-text">${count} / ${cap} registered</span>
-            <button class="btn btn-primary btn-sm" onclick="openModal('${session.id}')" ${full ? 'disabled' : ''}>
-              ${full ? '⛔ Full' : 'Sign Up →'}
-            </button>
-          </div>
-        </div>`;
-    }).join('');
-  }
-
-  // ─── MODAL ────────────────────────────────────
-  let activeSessionId = null;
-
-  function openModal(sessionId) {
-    activeSessionId = sessionId;
-    const sessions = getSessions();
-    const s = sessions.find(x => x.id === sessionId);
-    document.getElementById('modal-session-info').textContent =
-      `${formatDateFull(s.date)} · ${s.time}`;
-
-    // Pre-fill saved name
-    const savedName = localStorage.getItem('mss_my_name') || '';
-    document.getElementById('reg-name').value = savedName;
-    document.getElementById('reg-facility').value = '';
-    document.getElementById('reg-cert').value = '';
-    ['err-name','err-facility','err-cert'].forEach(id => document.getElementById(id).classList.remove('show'));
-
-    document.getElementById('register-modal').classList.add('open');
-  }
-
-  function closeModal() {
-    document.getElementById('register-modal').classList.remove('open');
-    activeSessionId = null;
-  }
-
-  function submitRegistration() {
-    const name     = document.getElementById('reg-name').value.trim();
-    const facility = document.getElementById('reg-facility').value;
-    const cert     = document.getElementById('reg-cert').value;
-    let valid = true;
-
-    if (!name)     { document.getElementById('err-name').classList.add('show');     valid = false; }
-    else           { document.getElementById('err-name').classList.remove('show'); }
-    if (!facility) { document.getElementById('err-facility').classList.add('show'); valid = false; }
-    else           { document.getElementById('err-facility').classList.remove('show'); }
-    if (!cert)     { document.getElementById('err-cert').classList.add('show');     valid = false; }
-    else           { document.getElementById('err-cert').classList.remove('show'); }
-
-    if (!valid) return;
-
-    // Check if already registered
-    const existing = getRegistrationsForSession(activeSessionId);
-    if (existing.some(r => r.name.toLowerCase() === name.toLowerCase())) {
-      showToast('⚠️ ' + name + ' is already registered for this session.', 'error');
-      closeModal();
-      return;
+        </div>
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="switchTab('home')" id="tab-home">🏠 Home</button>
+            <button class="tab-btn" onclick="switchTab('mysignups')" id="tab-mysignups">📋 My Sign-Ups</button>
+            <button class="tab-btn" onclick="switchTab('admin')" id="tab-admin">🔐 Admin</button>
+        </div>
+    </header>
+    <main>
+        <div class="tab-panel active" id="panel-home">
+            <div class="page-title">
+                <h2>2026 Training Schedule</h2>
+                <p>Safety Care Certification — select a session to register</p>
+            </div>
+            <div class="alert alert-amber">
+                <div class="alert-icon">⚠️</div>
+                <div>
+                    <strong>Arrive Early — Start Promptly at 8:30 AM</strong>
+                    <p>The door will be locked shortly after 8:30 so trainers can start on time.</p>
+                </div>
+            </div>
+            <div class="alert alert-red">
+                <div class="alert-icon">👟</div>
+                <div>
+                    <strong>Dress Code Required</strong>
+                    <p>
+                        Tennis shoes or low-heeled shoes ONLY. No sandals, slippers, or open-toe shoes. Loose-fitting / athletic wear recommended. 
+                        <em>Improper footwear = asked to leave.</em>
+                    </p>
+                </div>
+            </div>
+            <div class="sessions-header">
+                <h3>
+                    📅 Upcoming Sessions 
+                    <span class="session-count" id="open-count">—</span>
+                </h3>
+            </div>
+            <div id="session-list">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Loading sessions from database…</p>
+                </div>
+            </div>
+        </div>
+        <div class="tab-panel" id="panel-mysignups">
+            <div class="page-title">
+                <h2>My Sign-Ups</h2>
+                <p>All registered staff for Safety Care sessions</p>
+            </div>
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" id="signup-search" placeholder="Search by name or facility…" oninput="renderMySignups()"/>
+            </div>
+            <div id="my-signups-list">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Loading registrations…</p>
+                </div>
+            </div>
+        </div>
+        <div class="tab-panel" id="panel-admin">
+            <div class="admin-login" id="admin-login-box">
+                <div class="admin-login-header">
+                    <div class="lock-icon">🔐</div>
+                    <h3>Admin Access</h3>
+                    <p>Enter the admin password to manage sessions and view rosters.</p>
+                </div>
+                <div class="admin-login-body">
+                    <div class="admin-error" id="admin-error">Incorrect password. Please try again.</div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="admin-pw-input" placeholder="Enter password…" onkeydown="if(event.key==='Enter') adminLogin()"/>
+                    </div>
+                    <button class="btn btn-navy" style="width:100%;justify-content:center" onclick="adminLogin()">Log In →</button>
+                </div>
+            </div>
+            <div class="admin-dashboard" id="admin-dashboard" style="display:none">
+                <div class="admin-top-bar">
+                    <h2>⚙️ Admin Dashboard</h2>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap">
+                        <button class="btn btn-primary" onclick="toggleAddSession()">＋ Add Session</button>
+                        <button class="btn btn-outline btn-sm" onclick="adminLogout()">Log Out</button>
+                    </div>
+                </div>
+                <div class="add-session-panel" id="add-session-panel">
+                    <h4>➕ New Training Session</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>
+                                Date 
+                                <span>*</span>
+                            </label>
+                            <input type="date" id="ns-date"/>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Time 
+                                <span>*</span>
+                            </label>
+                            <input type="text" id="ns-time" value="8:30 AM – 5:00 PM"/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Trainer 1</label>
+                            <select id="ns-trainer1">
+                                <option value="">— None —</option>
+                                <option>Lola</option>
+                                <option>Joann</option>
+                                <option>Thomas</option>
+                                <option>Tammy</option>
+                                <option>Harley</option>
+                                <option>Leslie</option>
+                                <option>Jaedyn</option>
+                                <option>Lauren</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Trainer 2</label>
+                            <select id="ns-trainer2">
+                                <option value="">— None —</option>
+                                <option>Lola</option>
+                                <option>Joann</option>
+                                <option>Thomas</option>
+                                <option>Tammy</option>
+                                <option>Harley</option>
+                                <option>Leslie</option>
+                                <option>Jaedyn</option>
+                                <option>Lauren</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>
+                                Location 
+                                <span>*</span>
+                            </label>
+                            <input type="text" id="ns-location" value="Main Office Training Center"/>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                Max Capacity 
+                                <span>*</span>
+                            </label>
+                            <input type="number" id="ns-capacity" value="20" min="1" max="100"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes (optional)</label>
+                        <input type="text" id="ns-notes" placeholder="Any extra info for staff…"/>
+                    </div>
+                    <div style="display:flex;gap:10px">
+                        <button class="btn btn-primary" onclick="addSession()">Create Session</button>
+                        <button class="btn btn-outline" onclick="toggleAddSession()">Cancel</button>
+                    </div>
+                </div>
+                <div id="admin-roster-view" style="display:none">
+                    <div class="roster-header">
+                        <button class="btn btn-outline btn-sm" onclick="closeRoster()">← Back</button>
+                        <h3 id="roster-title">Session Roster</h3>
+                        <button class="btn btn-outline btn-sm" onclick="printRoster()">🖨️ Print Roster</button>
+                    </div>
+                    <div class="print-header" id="print-header"></div>
+                    <div class="roster-table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Home / Facility</th>
+                                    <th>Status</th>
+                                    <th>Registered On</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="roster-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="admin-session-list"></div>
+            </div>
+        </div>
+    </main>
+    <div class="modal-overlay" id="register-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Register for Training</h3>
+                <p id="modal-session-info">Safety Care Certification</p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>
+                        Full Name 
+                        <span>*</span>
+                    </label>
+                    <input type="text" id="reg-name" placeholder="Your full name…"/>
+                    <p class="form-error" id="err-name">Please enter your full name.</p>
+                </div>
+                <div class="form-group">
+                    <label>
+                        Home / Facility 
+                        <span>*</span>
+                    </label>
+                    <select id="reg-facility">
+                        <option value="">— Select your home / facility —</option>
+                        <option>PKV</option>
+                        <option>BV</option>
+                        <option>Cherokee</option>
+                        <option>Cheyenne</option>
+                        <option>CH</option>
+                        <option>Lawton</option>
+                        <option>Leech</option>
+                        <option>Maple View</option>
+                        <option>Marshall</option>
+                        <option>MWC</option>
+                        <option>Southgate</option>
+                        <option>So Maple</option>
+                        <option>Pinnacle</option>
+                        <option>Royce</option>
+                        <option>Wescott</option>
+                        <option>SH Apts</option>
+                        <option>SH Duplex</option>
+                        <option>St. Mary's</option>
+                        <option>Stone Ridge</option>
+                        <option>Riverside</option>
+                        <option>Mulberry</option>
+                    </select>
+                    <p class="form-error" id="err-facility">Please select your facility.</p>
+                </div>
+                <div class="form-group">
+                    <label>
+                        Certification Status 
+                        <span>*</span>
+                    </label>
+                    <select id="reg-cert">
+                        <option value="">— Select status —</option>
+                        <option>Initial</option>
+                        <option>Recertification</option>
+                    </select>
+                    <p class="form-error" id="err-cert">Please select your certification status.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" id="submit-btn" onclick="submitRegistration()">✓ Complete Registration</button>
+            </div>
+        </div>
+    </div>
+    <div class="toast-container" id="toast-container"></div>
+    <footer>
+        <span>Mid-Step Services</span>
+         — Safety Care Certification Training Portal © 2026 &nbsp;·&nbsp; Sioux City, Iowa
+    </footer>
+    <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyC89MiENU8-JdMhxG6QrkJ-RakSl9UkEZ0",
+        authDomain: "mss-safetycare.firebaseapp.com",
+        projectId: "mss-safetycare",
+        storageBucket: "mss-safetycare.firebasestorage.app",
+        messagingSenderId: "307708895395",
+        appId: "1:307708895395:web:23bd60553cec88bac01f16"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const ADMIN_PASSWORD = 'MSS2026!';
+    const DEFAULT_SESSIONS = [
+    {
+        date: '2026-04-21',
+        time: '8:30 AM – 5:00 PM',
+        location: 'Main Office Training Center',
+        trainer1: '',
+        trainer2: '',
+        maxCapacity: 20,
+        notes: ''
+    },
+    {
+        date: '2026-05-05',
+        time: '8:30 AM – 5:00 PM',
+        location: 'Main Office Training Center',
+        trainer1: '',
+        trainer2: '',
+        maxCapacity: 20,
+        notes: ''
+    },
+    {
+        date: '2026-05-20',
+        time: '8:30 AM – 5:00 PM',
+        location: 'Main Office Training Center',
+        trainer1: '',
+        trainer2: '',
+        maxCapacity: 20,
+        notes: ''
+    },
+    {
+        date: '2026-06-04',
+        time: '8:30 AM – 5:00 PM',
+        location: 'Main Office Training Center',
+        trainer1: '',
+        trainer2: '',
+        maxCapacity: 20,
+        notes: ''
+    },
+    {
+        date: '2026-06-17',
+        time: '8:30 AM – 5:00 PM',
+        location: 'Main Office Training Center',
+        trainer1: '',
+        trainer2: '',
+        maxCapacity: 20,
+        notes: ''
     }
-
-    const regs = getRegistrations();
-    regs.push({
-      id: 'r' + Date.now(),
-      sessionId: activeSessionId,
-      name,
-      facility,
-      cert,
-      registeredOn: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-      timestamp: Date.now()
+    ];
+    const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    function parseDate(str) {
+        const [y, m, d] = str.split('-').map(Number);
+        return new Date(y, m - 1, d);
+    }
+    function formatDateFull(str) {
+        const d = parseDate(str);
+        return `${WEEKDAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+    }
+    function getMonth(str) {
+        return MONTHS[parseDate(str).getMonth()];
+    }
+    function getDay(str) {
+        return parseDate(str).getDate();
+    }
+    function getWday(str) {
+        return WEEKDAYS[parseDate(str).getDay()];
+    }
+    let allSessions = [],
+        allRegistrations = [],
+        adminAuthed = false,
+        activeSessionId = null,
+        currentRosterSessionId = null;
+    async function seedSessionsIfEmpty() {
+        const snap = await db.collection('sessions').limit(1).get();
+        if (!snap.empty)
+            return;
+        const batch = db.batch();
+        DEFAULT_SESSIONS.forEach(s => {
+            const ref = db.collection('sessions').doc();
+            batch.set(ref, {
+                ...s,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        });
+        await batch.commit();
+    }
+    function startListeners() {
+        db.collection('sessions').orderBy('date').onSnapshot(snap => {
+            allSessions = snap.docs.map(d => ({
+                id: d.id,
+                ...d.data()
+            }));
+            renderSessions();
+            if (adminAuthed)
+                renderAdminSessions();
+        });
+        db.collection('registrations').orderBy('timestamp').onSnapshot(snap => {
+            allRegistrations = snap.docs.map(d => ({
+                id: d.id,
+                ...d.data()
+            }));
+            renderSessions();
+            renderMySignups();
+            if (adminAuthed && currentRosterSessionId)
+                renderRosterTable(currentRosterSessionId);
+        });
+    }
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('panel-' + tab).classList.add('active');
+        document.getElementById('tab-' + tab).classList.add('active');
+    }
+    function getSessionRegs(sid) {
+        return allRegistrations.filter(r => r.sessionId === sid);
+    }
+    function renderSessions() {
+        const container = document.getElementById('session-list');
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const upcoming = allSessions.filter(s => {
+            const d = parseDate(s.date);
+            d.setHours(0, 0, 0, 0);
+            return d >= today;
+        });
+        const openCount = upcoming.filter(s => getSessionRegs(s.id).length < s.maxCapacity).length;
+        document.getElementById('open-count').textContent = openCount + ' open';
+        if (upcoming.length === 0) {
+            container.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><h3>No upcoming sessions</h3><p>Check back soon!</p></div>';
+            return;
+        }
+        container.innerHTML = upcoming.map(s => {
+            const regs = getSessionRegs(s.id),
+                count = regs.length,
+                cap = s.maxCapacity,
+                full = count >= cap;
+            const pct = Math.min(Math.round((count / cap) * 100), 100);
+            const barClass = pct >= 100 ? 'danger' : pct >= 75 ? 'warn' : '';
+            const trainers = [s.trainer1, s.trainer2].filter(Boolean).join(' & ');
+            return `<div class="session-card${full ? ' full' : ''}"><div class="date-block"><div class="date-month">${getMonth(s.date)}</div><div class="date-day">${getDay(s.date)}</div><div class="date-weekday">${getWday(s.date)}</div></div><div class="session-info"><div class="session-title">Safety Care Certification Training</div><div class="session-meta"><span class="meta-item">⏰ ${s.time}</span><span class="meta-item">📍 ${s.location}</span></div>${trainers ? `<div class="session-trainers">🧑‍🏫 ${trainers}</div>` : ''} ${s.notes ? `<div class="meta-item" style="font-style:italic">📝 ${s.notes}</div>` : ''}<div class="capacity-bar-wrap"><div class="capacity-bar"><div class="capacity-fill ${barClass}" style="width:${pct}%"></div></div></div></div><div class="session-actions"><span class="status-badge ${full ? 'status-full' : 'status-open'}">${full ? 'Full' : 'Open'}</span><span class="capacity-text">${count} / ${cap} registered</span><button class="btn btn-primary btn-sm" onclick="openModal('${s.id}')" ${full ? 'disabled' : ''} >${full ? '⛔ Full' : 'Sign Up →'}</button></div></div>`;
+        }).join('');
+    }
+    function openModal(sid) {
+        activeSessionId = sid;
+        const s = allSessions.find(x => x.id === sid);
+        document.getElementById('modal-session-info').textContent = `${formatDateFull(s.date)} · ${s.time}`;
+        document.getElementById('reg-name').value = localStorage.getItem('mss_my_name') || '';
+        document.getElementById('reg-facility').value = '';
+        document.getElementById('reg-cert').value = '';
+        ['err-name', 'err-facility', 'err-cert'].forEach(id => document.getElementById(id).classList.remove('show'));
+        document.getElementById('register-modal').classList.add('open');
+    }
+    function closeModal() {
+        document.getElementById('register-modal').classList.remove('open');
+        activeSessionId = null;
+    }
+    async function submitRegistration() {
+        const name = document.getElementById('reg-name').value.trim(),
+            facility = document.getElementById('reg-facility').value,
+            cert = document.getElementById('reg-cert').value;
+        document.getElementById('err-name').classList.toggle('show', !name);
+        document.getElementById('err-facility').classList.toggle('show', !facility);
+        document.getElementById('err-cert').classList.toggle('show', !cert);
+        if (!name || !facility || !cert)
+            return;
+        if (allRegistrations.find(r => r.sessionId === activeSessionId && r.name.toLowerCase() === name.toLowerCase())) {
+            showToast('⚠️ ' + name + ' is already registered for this session.', 'error');
+            closeModal();
+            return;
+        }
+        const btn = document.getElementById('submit-btn');
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+        try {
+            await db.collection('registrations').add({
+                sessionId: activeSessionId,
+                name,
+                facility,
+                cert,
+                registeredOn: new Date().toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                }),
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            localStorage.setItem('mss_my_name', name);
+            closeModal();
+            showToast('✅ ' + name + ' registered successfully!', 'success');
+        }
+        catch (err) {
+            showToast('❌ Error saving — please try again.', 'error');
+        }
+        btn.disabled = false;
+        btn.textContent = '✓ Complete Registration';
+    }
+    document.getElementById('register-modal').addEventListener('click', function(e) {
+        if (e.target === this)
+            closeModal();
     });
-    saveRegistrations(regs);
-    localStorage.setItem('mss_my_name', name);
-
-    closeModal();
-    renderSessions();
-    showToast('✅ ' + name + ' registered successfully!', 'success');
-  }
-
-  // Close modal on backdrop click
-  document.getElementById('register-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
-
-  // ─── MY SIGN-UPS ──────────────────────────────
-  function renderMySignups() {
-    const query = (document.getElementById('signup-search').value || '').toLowerCase().trim();
-    let regs = getRegistrations();
-    if (query) regs = regs.filter(r => r.name.toLowerCase().includes(query));
-
-    regs.sort((a,b) => {
-      const sessions = getSessions();
-      const sa = sessions.find(s => s.id === a.sessionId);
-      const sb = sessions.find(s => s.id === b.sessionId);
-      return (sa?.date || '').localeCompare(sb?.date || '');
-    });
-
-    const container = document.getElementById('my-signups-list');
-
-    if (regs.length === 0) {
-      container.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><h3>${query ? 'No results found' : 'No sign-ups yet'}</h3><p>${query ? 'Try a different name.' : 'Head to the Home tab to register for a session!'}</p></div>`;
-      return;
+    function renderMySignups() {
+        const query = (document.getElementById('signup-search')?.value || '').toLowerCase().trim();
+        let regs = [...allRegistrations];
+        if (query)
+            regs = regs.filter(r => r.name.toLowerCase().includes(query) || (r.facility || '').toLowerCase().includes(query));
+        regs.sort((a, b) => {
+            const sa = allSessions.find(s => s.id === a.sessionId),
+                sb = allSessions.find(s => s.id === b.sessionId);
+            return (sa?.date || '').localeCompare(sb?.date || '');
+        });
+        const container = document.getElementById('my-signups-list');
+        if (regs.length === 0) {
+            container.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><h3>${query ? 'No results found' : 'No sign-ups yet'}</h3><p>${query ? 'Try a different name.' : 'Head to the Home tab to register for a session!'}</p></div>`;
+            return;
+        }
+        container.innerHTML = regs.map(reg => {
+            const s = allSessions.find(x => x.id === reg.sessionId);
+            if (!s)
+                return '';
+            return `<div class="signup-card"><div class="signup-card-left"><div class="signup-date-pill"><div class="month">${getMonth(s.date)}</div><div class="day">${getDay(s.date)}</div></div><div class="signup-info"><h4>${reg.name}</h4><p>📍 ${reg.facility} &nbsp;·&nbsp; ⏰ ${s.time}</p><p>📅 ${formatDateFull(s.date)}</p><span class="cert-badge">${reg.cert}</span></div></div><button class="btn btn-danger btn-sm" onclick="cancelReg('${reg.id}')">✕ Cancel</button></div>`;
+        }).join('');
     }
-
-    const sessions = getSessions();
-
-    container.innerHTML = regs.map(reg => {
-      const s = sessions.find(x => x.id === reg.sessionId);
-      if (!s) return '';
-      return `
-        <div class="signup-card">
-          <div class="signup-card-left">
-            <div class="signup-date-pill">
-              <div class="month">${getMonth(s.date)}</div>
-              <div class="day">${getDay(s.date)}</div>
-            </div>
-            <div class="signup-info">
-              <h4>${reg.name}</h4>
-              <p>📍 ${reg.facility} &nbsp;·&nbsp; ⏰ ${s.time}</p>
-              <p>📅 ${formatDateFull(s.date)}</p>
-              <span class="cert-badge">${reg.cert}</span>
-            </div>
-          </div>
-          <button class="btn btn-danger btn-sm" onclick="cancelReg('${reg.id}')">✕ Cancel</button>
-        </div>`;
-    }).join('');
-  }
-
-  function cancelReg(regId) {
-    if (!confirm('Cancel this registration?')) return;
-    let regs = getRegistrations().filter(r => r.id !== regId);
-    saveRegistrations(regs);
-    renderMySignups();
-    renderSessions();
-    showToast('Registration cancelled.', 'success');
-  }
-
-  // ─── ADMIN ────────────────────────────────────
-  let adminAuthed = false;
-
-  function adminLogin() {
-    const pw = document.getElementById('admin-pw-input').value;
-    if (pw === ADMIN_PASSWORD) {
-      adminAuthed = true;
-      document.getElementById('admin-login-box').style.display = 'none';
-      document.getElementById('admin-dashboard').style.display = 'block';
-      document.getElementById('admin-error').classList.remove('show');
-      renderAdminSessions();
-    } else {
-      document.getElementById('admin-error').classList.add('show');
-      document.getElementById('admin-pw-input').value = '';
+    async function cancelReg(regId) {
+        if (!confirm('Cancel this registration?'))
+            return;
+        try {
+            await db.collection('registrations').doc(regId).delete();
+            showToast('Registration cancelled.', 'success');
+        } catch (err) {
+            showToast('❌ Error cancelling.', 'error');
+        }
     }
-  }
-
-  function adminLogout() {
-    adminAuthed = false;
-    document.getElementById('admin-dashboard').style.display = 'none';
-    document.getElementById('admin-login-box').style.display = 'block';
-    document.getElementById('admin-pw-input').value = '';
-  }
-
-  function renderAdminSessions() {
-    if (!adminAuthed) return;
-    closeRoster();
-    const sessions = getSessions().sort((a,b) => a.date.localeCompare(b.date));
-    const container = document.getElementById('admin-session-list');
-
-    if (sessions.length === 0) {
-      container.innerHTML = `<div class="empty-state"><div class="empty-icon">📅</div><h3>No sessions yet</h3><p>Click "+ Add Session" to create one.</p></div>`;
-      return;
+    function adminLogin() {
+        const pw = document.getElementById('admin-pw-input').value;
+        if (pw === ADMIN_PASSWORD) {
+            adminAuthed = true;
+            document.getElementById('admin-login-box').style.display = 'none';
+            document.getElementById('admin-dashboard').style.display = 'block';
+            document.getElementById('admin-error').classList.remove('show');
+            renderAdminSessions();
+        } else {
+            document.getElementById('admin-error').classList.add('show');
+            document.getElementById('admin-pw-input').value = '';
+        }
     }
-
-    container.innerHTML = sessions.map(s => {
-      const regs = getRegistrationsForSession(s.id);
-      const trainers = [s.trainer1, s.trainer2].filter(Boolean).join(' & ');
-      return `
-        <div class="admin-session-card">
-          <div class="admin-session-info">
-            <h4>📅 ${formatDateFull(s.date)}</h4>
-            <p>⏰ ${s.time} &nbsp;·&nbsp; 📍 ${s.location} &nbsp;·&nbsp; 👥 ${regs.length}/${s.maxCapacity} registered${trainers ? ' &nbsp;·&nbsp; 🧑‍🏫 ' + trainers : ''}</p>
-            ${s.notes ? `<p style="font-style:italic;margin-top:4px">📝 ${s.notes}</p>` : ''}
-          </div>
-          <div class="admin-session-actions">
-            <button class="btn btn-primary btn-sm" onclick="openRoster('${s.id}')">📋 View Roster</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteSession('${s.id}')">🗑️ Delete</button>
-          </div>
-        </div>`;
-    }).join('');
-  }
-
-  function deleteSession(sessionId) {
-    if (!confirm('Delete this session? This will also remove all its registrations.')) return;
-    let sessions = getSessions().filter(s => s.id !== sessionId);
-    saveSessions(sessions);
-    let regs = getRegistrations().filter(r => r.sessionId !== sessionId);
-    saveRegistrations(regs);
-    renderAdminSessions();
-    renderSessions();
-    showToast('Session deleted.', 'success');
-  }
-
-  function toggleAddSession() {
-    const panel = document.getElementById('add-session-panel');
-    panel.classList.toggle('open');
-    if (panel.classList.contains('open')) {
-      document.getElementById('ns-date').value = '';
-      document.getElementById('ns-notes').value = '';
+    function adminLogout() {
+        adminAuthed = false;
+        document.getElementById('admin-dashboard').style.display = 'none';
+        document.getElementById('admin-login-box').style.display = 'block';
+        document.getElementById('admin-pw-input').value = '';
     }
-  }
-
-  function addSession() {
-    const date     = document.getElementById('ns-date').value;
-    const time     = document.getElementById('ns-time').value.trim();
-    const trainer1 = document.getElementById('ns-trainer1').value;
-    const trainer2 = document.getElementById('ns-trainer2').value;
-    const location = document.getElementById('ns-location').value.trim();
-    const capacity = parseInt(document.getElementById('ns-capacity').value);
-    const notes    = document.getElementById('ns-notes').value.trim();
-
-    if (!date || !time || !location || !capacity) {
-      showToast('Please fill in all required fields.', 'error');
-      return;
+    function renderAdminSessions() {
+        if (!adminAuthed)
+            return;
+        closeRoster();
+        const container = document.getElementById('admin-session-list');
+        if (allSessions.length === 0) {
+            container.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><h3>No sessions yet</h3><p>Click "+ Add Session" to create one.</p></div>';
+            return;
+        }
+        container.innerHTML = allSessions.map(s => {
+            const regs = getSessionRegs(s.id),
+                trainers = [s.trainer1, s.trainer2].filter(Boolean).join(' & ');
+            return `<div class="admin-session-card"><div class="admin-session-info"><h4>📅 ${formatDateFull(s.date)}</h4><p>⏰ ${s.time} &nbsp;·&nbsp; 📍 ${s.location} &nbsp;·&nbsp; 👥 ${regs.length}/${s.maxCapacity} registered${trainers ? ' &nbsp;·&nbsp; 🧑‍🏫 ' + trainers : ''}</p>${s.notes ? `<p style="font-style:italic;margin-top:4px">📝 ${s.notes}</p>` : ''}</div><div class="admin-session-actions"><button class="btn btn-primary btn-sm" onclick="openRoster('${s.id}')">📋 View Roster</button><button class="btn btn-danger btn-sm" onclick="deleteSession('${s.id}')">🗑️ Delete</button></div></div>`;
+        }).join('');
     }
-
-    const sessions = getSessions();
-    sessions.push({ id: 's' + Date.now(), date, time, trainer1, trainer2, location, maxCapacity: capacity, notes });
-    saveSessions(sessions);
-    toggleAddSession();
-    renderAdminSessions();
-    renderSessions();
-    showToast('✅ Session added!', 'success');
-  }
-
-  // ─── ROSTER ───────────────────────────────────
-  let currentRosterSession = null;
-
-  function openRoster(sessionId) {
-    const sessions = getSessions();
-    const s = sessions.find(x => x.id === sessionId);
-    currentRosterSession = s;
-
-    document.getElementById('admin-session-list').style.display = 'none';
-    document.getElementById('admin-roster-view').style.display  = 'block';
-    document.getElementById('roster-title').textContent = formatDateFull(s.date);
-
-    document.getElementById('print-header').innerHTML = `
-      <strong style="font-size:18px;color:#0d1f3c">Mid-Step Services — Safety Care Certification</strong><br>
-      <span style="font-size:14px;color:#475569">${formatDateFull(s.date)} · ${s.time} · ${s.location}</span>
-    `;
-
-    renderRosterTable(sessionId);
-  }
-
-  function renderRosterTable(sessionId) {
-    const regs = getRegistrationsForSession(sessionId);
-    const tbody = document.getElementById('roster-tbody');
-
-    if (regs.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--gray-400);font-weight:700">No registrations yet.</td></tr>`;
-      return;
+    async function deleteSession(sid) {
+        if (!confirm('Delete this session and all its registrations?'))
+            return;
+        try {
+            const snap = await db.collection('registrations').where('sessionId', '==', sid).get();
+            const batch = db.batch();
+            snap.docs.forEach(d => batch.delete(d.ref));
+            batch.delete(db.collection('sessions').doc(sid));
+            await batch.commit();
+            showToast('Session deleted.', 'success');
+        } catch (err) {
+            showToast('❌ Error deleting session.', 'error');
+        }
     }
-
-    tbody.innerHTML = regs.map((r, i) => `
-      <tr>
-        <td>${i + 1}</td>
-        <td class="td-name">${r.name}</td>
-        <td>${r.facility}</td>
-        <td><span class="td-cert ${r.cert === 'Initial' ? 'cert-initial' : 'cert-recert'}">${r.cert}</span></td>
-        <td>${r.registeredOn}</td>
-        <td>
-          <button class="btn btn-danger btn-sm" onclick="removeFromRoster('${r.id}','${sessionId}')">Remove</button>
-        </td>
-      </tr>`).join('');
-  }
-
-  function removeFromRoster(regId, sessionId) {
-    if (!confirm('Remove this person from the roster?')) return;
-    let regs = getRegistrations().filter(r => r.id !== regId);
-    saveRegistrations(regs);
-    renderRosterTable(sessionId);
-    renderSessions();
-    showToast('Removed from roster.', 'success');
-  }
-
-  function closeRoster() {
-    document.getElementById('admin-session-list').style.display = 'block';
-    document.getElementById('admin-roster-view').style.display  = 'none';
-    currentRosterSession = null;
-  }
-
-  function printRoster() { window.print(); }
-
-  // ─── TOAST ────────────────────────────────────
-  function showToast(msg, type = 'success') {
-    const container = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = msg;
-    container.appendChild(toast);
-    setTimeout(() => toast.remove(), 3500);
-  }
-
-  // ─── INIT ─────────────────────────────────────
-  renderSessions();
-</script>
+    function toggleAddSession() {
+        const panel = document.getElementById('add-session-panel');
+        panel.classList.toggle('open');
+        if (panel.classList.contains('open')) {
+            document.getElementById('ns-date').value = '';
+            document.getElementById('ns-notes').value = '';
+        }
+    }
+    async function addSession() {
+        const date = document.getElementById('ns-date').value,
+            time = document.getElementById('ns-time').value.trim(),
+            trainer1 = document.getElementById('ns-trainer1').value,
+            trainer2 = document.getElementById('ns-trainer2').value,
+            location = document.getElementById('ns-location').value.trim(),
+            capacity = parseInt(document.getElementById('ns-capacity').value),
+            notes = document.getElementById('ns-notes').value.trim();
+        if (!date || !time || !location || !capacity) {
+            showToast('Please fill in all required fields.', 'error');
+            return;
+        }
+        try {
+            await db.collection('sessions').add({
+                date,
+                time,
+                trainer1,
+                trainer2,
+                location,
+                maxCapacity: capacity,
+                notes,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            toggleAddSession();
+            showToast('✅ Session added!', 'success');
+        } catch (err) {
+            showToast('❌ Error adding session.', 'error');
+        }
+    }
+    function openRoster(sid) {
+        currentRosterSessionId = sid;
+        const s = allSessions.find(x => x.id === sid);
+        document.getElementById('admin-session-list').style.display = 'none';
+        document.getElementById('admin-roster-view').style.display = 'block';
+        document.getElementById('roster-title').textContent = formatDateFull(s.date);
+        document.getElementById('print-header').innerHTML = `<strong style="font-size:18px;color:#0d1f3c">Mid-Step Services — Safety Care Certification</strong><br><span style="font-size:14px;color:#475569">${formatDateFull(s.date)} · ${s.time} · ${s.location}</span>`;
+        renderRosterTable(sid);
+    }
+    function renderRosterTable(sid) {
+        const regs = getSessionRegs(sid);
+        const tbody = document.getElementById('roster-tbody');
+        if (regs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--gray-400);font-weight:700">No registrations yet.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = regs.map((r, i) => `<tr><td>${i + 1}</td><td class="td-name">${r.name}</td><td>${r.facility}</td><td><span class="td-cert ${r.cert === 'Initial' ? 'cert-initial' : 'cert-recert'}">${r.cert}</span></td><td>${r.registeredOn || '—'}</td><td><button class="btn btn-danger btn-sm" onclick="removeFromRoster('${r.id}')">Remove</button></td></tr>`).join('');
+    }
+    async function removeFromRoster(regId) {
+        if (!confirm('Remove this person?'))
+            return;
+        try {
+            await db.collection('registrations').doc(regId).delete();
+            showToast('Removed from roster.', 'success');
+        } catch (err) {
+            showToast('❌ Error removing.', 'error');
+        }
+    }
+    function closeRoster() {
+        document.getElementById('admin-session-list').style.display = 'block';
+        document.getElementById('admin-roster-view').style.display = 'none';
+        currentRosterSessionId = null;
+    }
+    function printRoster() {
+        window.print();
+    }
+    function showToast(msg, type='success') {
+        const c = document.getElementById('toast-container');
+        const t = document.createElement('div');
+        t.className = `toast ${type}`;
+        t.textContent = msg;
+        c.appendChild(t);
+        setTimeout(() => t.remove(), 3500);
+    }
+    (async () => {
+        try {
+            await seedSessionsIfEmpty();
+            startListeners();
+        } catch (err) {
+            console.error('Firebase error:', err);
+            document.getElementById('session-list').innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><h3>Connection error</h3><p>Could not reach the database. Please refresh and try again.</p></div>';
+        }
+    })();
+    </script>
 </body>
 </html>
