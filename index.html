@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Safety Care Training — Mid-Step Services</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0b1f45; --navy2: #12306a; --blue: #1e5fba;
+      --cyan: #00c8e8; --cyan2: #00e8ff; --green: #22d98a;
+      --red: #ff4d6a; --yellow: #ffc542; --bg: #f2f5fb;
+      --surface: #ffffff; --border: #dde4f0; --text: #0d1f3c;
+      --muted: #607090; --radius: 14px; --shadow: 0 4px 20px rgba(11,31,69,0.1);
+    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 40px; }
+    .app-header { background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 55%, #0e4a8a 100%); position: sticky; top: 0; z-index: 200; box-shadow: 0 4px 30px rgba(0,0,0,0.3); }
+    .header-top { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px 12px; gap: 10px; }
+    .brand { display: flex; align-items: center; gap: 11px; }
+    .brand-logo { width: 44px; height: 44px; border-radius: 10px; background: white; padding: 3px; object-fit: contain; flex-shrink: 0; }
+    .brand-text h1 { color: #fff; font-size: 15px; font-weight: 800; line-height: 1.15; }
+    .brand-text p { color: rgba(255,255,255,0.6); font-size: 10.5px; font-weight: 500; }
+    .qbs-badge { display: flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); border-radius: 10px; padding: 6px 10px; flex-shrink: 0; }
+    .qbs-badge img { width: 26px; height: 26px; border-radius: 6px; }
+    .qbs-badge span { color: var(--cyan2); font-size: 11.5px; font-weight: 700; }
+    .app-nav { display: flex; border-top: 1px solid rgba(255,255,255,0.1); }
+    .nav-item { flex: 1; background: none; border: none; color: rgba(255,255,255,0.55); font-family: inherit; font-size: 12.5px; font-weight: 600; padding: 11px 6px; cursor: pointer; transition: all 0.2s; border-bottom: 3px solid transparent; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .nav-item.active { color: #fff; border-bottom-color: var(--cyan); background: rgba(255,255,255,0.07); }
+    .nav-item:hover:not(.active) { color: rgba(255,255,255,0.85); }
+    .page { display: none; padding: 18px 16px; max-width: 680px; margin: 0 auto; }
+    .page.active { display: block; }
+    .section-title { font-size: 22px; font-weight: 900; color: var(--navy); letter-spacing: -0.5px; }
+    .section-sub { font-size: 13px; color: var(--muted); margin-top: 2px; font-weight: 500; margin-bottom: 16px; }
+    .alert { border-radius: var(--radius); padding: 13px 15px; margin-bottom: 12px; font-size: 13px; font-weight: 500; line-height: 1.5; border-left: 4px solid; }
+    .alert-warn { background: #fffbec; border-color: var(--yellow); color: #6b4c00; }
+    .alert-danger { background: #fff2f4; border-color: var(--red); color: #7a1020; }
+    .alert strong { display: block; font-size: 13.5px; font-weight: 800; margin-bottom: 2px; }
+    .count-pill { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, var(--navy), var(--blue)); color: white; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 20px; margin-bottom: 14px; }
+    .session-card { background: var(--surface); border-radius: 18px; margin-bottom: 12px; overflow: hidden; border: 1.5px solid var(--border); box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; }
+    .session-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(11,31,69,0.14); }
+    .session-card-row { display: flex; align-items: stretch; }
+    .date-col { background: linear-gradient(160deg, var(--navy2), var(--blue)); color: white; padding: 18px 14px; min-width: 76px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .date-col .mo { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.75; }
+    .date-col .dd { font-size: 34px; font-weight: 900; line-height: 1; color: var(--cyan2); }
+    .date-col .dy { font-size: 9.5px; font-weight: 700; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.8px; }
+    .info-col { flex: 1; padding: 14px 15px; display: flex; flex-direction: column; gap: 8px; }
+    .info-col h3 { font-size: 14.5px; font-weight: 800; color: var(--navy); line-height: 1.2; }
+    .meta-list { display: flex; flex-direction: column; gap: 3px; }
+    .meta-item { font-size: 12px; color: var(--muted); font-weight: 500; display: flex; align-items: center; gap: 5px; }
+    .card-footer { display: flex; align-items: center; gap: 10px; }
+    .cap-wrap { flex: 1; }
+    .cap-label { font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+    .cap-track { height: 6px; background: #e8edf6; border-radius: 3px; overflow: hidden; }
+    .cap-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--green), #1ab872); transition: width 0.6s ease; }
+    .cap-fill.med { background: linear-gradient(90deg, var(--yellow), #e8a800); }
+    .cap-fill.hi { background: linear-gradient(90deg, var(--red), #d93050); }
+    .badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 20px; white-space: nowrap; }
+    .badge-open { background: #d8fae9; color: #0c6b38; }
+    .badge-full { background: #ffe0e5; color: #8b0018; }
+    .badge-att { background: #d8fae9; color: #0c6b38; }
+    .badge-noshow { background: #ffe0e5; color: #8b0018; }
+    .badge-reg { background: #e0eaff; color: #1a3a8a; }
+    .badge-can { background: #f2e0ff; color: #5a1a8a; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 18px; border-radius: 10px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; border: none; transition: all 0.18s; }
+    .btn-primary { background: linear-gradient(135deg, var(--blue), #1047a0); color: white; box-shadow: 0 3px 12px rgba(30,95,186,0.35); }
+    .btn-primary:hover { transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-outline { background: transparent; border: 2px solid var(--blue); color: var(--blue); }
+    .btn-outline:hover { background: var(--blue); color: white; }
+    .btn-danger { background: linear-gradient(135deg, #ff4d6a, #d93050); color: white; }
+    .btn-sm { padding: 6px 12px; font-size: 12px; border-radius: 8px; }
+    .btn-full { width: 100%; padding: 14px; font-size: 15px; border-radius: 12px; }
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(5,15,40,0.6); z-index: 500; align-items: flex-end; backdrop-filter: blur(3px); }
+    .overlay.open { display: flex; }
+    .drawer { background: white; border-radius: 24px 24px 0 0; width: 100%; max-width: 680px; margin: 0 auto; max-height: 93vh; overflow-y: auto; padding: 8px 22px 32px; animation: slideUp 0.28s ease; }
+    @keyframes slideUp { from { transform: translateY(110%); } to { transform: translateY(0); } }
+    .drawer-handle { width: 38px; height: 4px; background: #d0d8e8; border-radius: 2px; margin: 12px auto 20px; }
+    .drawer-title { font-size: 22px; font-weight: 900; color: var(--navy); letter-spacing: -0.5px; }
+    .drawer-sub { font-size: 13px; color: var(--muted); margin-top: 3px; margin-bottom: 22px; font-weight: 500; }
+    .form-group { margin-bottom: 15px; }
+    .form-label { display: block; font-size: 12.5px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .req { color: var(--red); }
+    .form-control { width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 15px; color: var(--text); background: #fafbfe; transition: border-color 0.2s; -webkit-appearance: none; }
+    .form-control:focus { outline: none; border-color: var(--cyan); background: white; box-shadow: 0 0 0 3px rgba(0,200,232,0.12); }
+    .form-control.err { border-color: var(--red); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-actions { display: flex; gap: 10px; margin-top: 22px; }
+    .form-actions .btn { flex: 1; }
+    .err-msg { color: var(--red); font-size: 12.5px; font-weight: 600; margin-top: 8px; display: none; }
+    .card { background: var(--surface); border-radius: var(--radius); padding: 18px; margin-bottom: 12px; border: 1.5px solid var(--border); box-shadow: var(--shadow); }
+    .tbl-wrap { overflow-x: auto; border-radius: 10px; border: 1.5px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    th { background: #f4f6fb; padding: 9px 12px; text-align: left; font-size: 10.5px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 0.7px; border-bottom: 2px solid var(--border); white-space: nowrap; }
+    td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8faff; }
+    .empty { text-align: center; padding: 50px 20px; }
+    .empty-icon { font-size: 50px; margin-bottom: 12px; }
+    .empty h3 { font-size: 18px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+    .empty p { font-size: 13px; color: var(--muted); font-weight: 500; }
+    .loading { text-align: center; padding: 44px 20px; }
+    .spinner { width: 38px; height: 38px; border: 3px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.75s linear infinite; margin: 0 auto 14px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading p { font-size: 13px; color: var(--muted); font-weight: 600; }
+    .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--navy); color: white; padding: 12px 22px; border-radius: 30px; font-size: 13.5px; font-weight: 700; z-index: 999; transition: transform 0.3s ease; white-space: nowrap; box-shadow: 0 8px 30px rgba(0,0,0,0.3); pointer-events: none; }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.ok { background: linear-gradient(135deg, #0c6b38, #1ab872); }
+    .toast.err { background: linear-gradient(135deg, #8b0018, var(--red)); }
+    .admin-sess-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .admin-sess-meta { flex: 1; min-width: 0; }
+    .admin-sess-date { font-size: 15px; font-weight: 800; color: var(--navy); }
+    .admin-sess-sub { font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 3px; line-height: 1.5; }
+    .admin-sess-actions { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
+    .divider { height: 1px; background: var(--border); margin: 14px 0; }
+    @media print { .no-print { display: none !important; } .app-header { display: none !important; } .page { display: block !important; padding: 0; max-width: 100%; } body { background: white; } }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-top">
+    <div class="brand">
+      <img class="brand-logo" src="https://mss-safetycare.netlify.app/favicon.ico" alt="MSS" onerror="this.style.display='none'">
+      <div class="brand-text">
+        <h1>Mid-Step Services</h1>
+        <p>Enhancing Abilities… Enriching Lives</p>
+      </div>
+    </div>
+    <div class="qbs-badge">
+      <img src="https://qbs.com/wp-content/uploads/2021/09/cropped-QBS-Logo-Primary-192x192.png" alt="QBS">
+      <span>Safety-Care®</span>
+    </div>
+  </div>
+  <nav class="app-nav">
+    <button class="nav-item active" id="nav-home" onclick="goTo('home')">🏠 Home</button>
+    <button class="nav-item" id="nav-mysignups" onclick="goTo('mysignups')">📋 My Sign-Ups</button>
+    <button class="nav-item" id="nav-admin" onclick="goTo('admin')">🔐 Admin</button>
+  </nav>
+</header>
+
+<section class="page active" id="page-home">
+  <div class="section-title">2026 Training Schedule</div>
+  <div class="section-sub">Safety Care Certification — select a session to register</div>
+  <div class="alert alert-warn"><strong>⚠️ Arrive Early — Start Promptly at 8:30 AM</strong>The door will be locked shortly after 8:30 so trainers can start on time.</div>
+  <div class="alert alert-danger"><strong>👟 Dress Code Required</strong>Tennis shoes or low-heeled shoes ONLY. No sandals, slippers, or open-toe shoes. Loose-fitting / athletic wear recommended. <em>Improper footwear = asked to leave.</em></div>
+  <div id="home-sessions"><div class="loading"><div class="spinner"></div><p>Loading sessions…</p></div></div>
+</section>
+
+<section class="page" id="page-mysignups">
+  <div class="section-title">My Sign-Ups</div>
+  <div class="section-sub">Search by name to find your registrations</div>
+  <div class="card"><input class="form-control" id="search-input" type="text" placeholder="🔍  Type your name…" oninput="onSearch()"></div>
+  <div id="search-results"><div class="empty"><div class="empty-icon">🔍</div><h3>Search for your registration</h3><p>Type your name above to find your sign-ups</p></div></div>
+</section>
+
+<section class="page" id="page-admin">
+  <div id="admin-login">
+    <div class="section-title">Admin Access</div>
+    <div class="section-sub">Enter your password to manage sessions</div>
+    <div class="card">
+      <div class="form-group"><label class="form-label">Password</label><input class="form-control" id="admin-pw" type="password" placeholder="Enter password…" onkeyup="if(event.key==='Enter') doLogin()"></div>
+      <button class="btn btn-primary btn-full" onclick="doLogin()">🔐 Log In</button>
+      <div class="err-msg" id="login-err">Incorrect password. Please try again.</div>
+    </div>
+  </div>
+  <div id="admin-dash" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px;">
+      <div><div class="section-title">Admin Dashboard</div><div class="section-sub">All Training Sessions</div></div>
+      <button class="btn btn-danger btn-sm no-print" onclick="doLogout()">Log Out</button>
+    </div>
+    <button class="btn btn-primary no-print" style="margin-bottom:16px" onclick="openAddSession()">➕ Add Session</button>
+    <div id="admin-sessions"><div class="loading"><div class="spinner"></div><p>Loading…</p></div></div>
+  </div>
+  <div id="roster-view" style="display:none">
+    <div style="display:flex;gap:10px;margin-bottom:16px;" class="no-print">
+      <button class="btn btn-outline btn-sm" onclick="closeRoster()">← Back</button>
+      <button class="btn btn-primary btn-sm" onclick="window.print()">🖨️ Print Roster</button>
+    </div>
+    <div id="roster-content"></div>
+  </div>
+</section>
+
+<div class="overlay" id="ov-signup" onclick="closeIfBg(event,'ov-signup')">
+  <div class="drawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title">Register for Training</div>
+    <div class="drawer-sub" id="signup-info">…</div>
+    <div class="form-group"><label class="form-label">Full Name <span class="req">*</span></label><input class="form-control" id="su-name" type="text" placeholder="Your full name"></div>
+    <div class="form-group"><label class="form-label">Home / Facility <span class="req">*</span></label>
+      <select class="form-control" id="su-facility">
+        <option value="">— Select your home / facility —</option>
+        <option>PKV</option><option>BV</option><option>Cherokee</option><option>Cheyenne</option><option>CH</option><option>Lawton</option><option>Leech</option><option>Maple View</option><option>Marshall</option><option>MWC</option><option>Southgate</option><option>So Maple</option><option>Pinnacle</option><option>Royce</option><option>Wescott</option><option>SH Apts</option><option>SH Duplex</option><option>St. Mary's</option><option>Stone Ridge</option><option>Riverside</option><option>Mulberry</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Certification Status <span class="req">*</span></label>
+      <select class="form-control" id="su-cert"><option value="">— Select status —</option><option value="Initial">Initial</option><option value="Recertification">Recertification</option></select>
+    </div>
+    <div class="err-msg" id="su-err">Please complete all required fields.</div>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeOverlay('ov-signup')">Cancel</button>
+      <button class="btn btn-primary" id="su-submit" onclick="submitSignup()">✓ Complete Registration</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="ov-addsess" onclick="closeIfBg(event,'ov-addsess')">
+  <div class="drawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title">➕ New Training Session</div>
+    <div class="drawer-sub">Fill in the details to create a session</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Date <span class="req">*</span></label><input class="form-control" id="as-date" type="date"></div>
+      <div class="form-group"><label class="form-label">Max Capacity <span class="req">*</span></label><input class="form-control" id="as-cap" type="number" value="20" min="1"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Start Time</label><input class="form-control" id="as-tstart" type="time" value="08:30"></div>
+      <div class="form-group"><label class="form-label">End Time</label><input class="form-control" id="as-tend" type="time" value="17:00"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Trainer 1</label>
+        <select class="form-control" id="as-t1"><option value="">— None —</option><option>Lola</option><option>Joann</option><option>Thomas</option><option>Tammy</option><option>Harley</option><option>Leslie</option><option>Jaedyn</option><option>Lauren</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Trainer 2</label>
+        <select class="form-control" id="as-t2"><option value="">— None —</option><option>Lola</option><option>Joann</option><option>Thomas</option><option>Tammy</option><option>Harley</option><option>Leslie</option><option>Jaedyn</option><option>Lauren</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Location <span class="req">*</span></label><input class="form-control" id="as-loc" type="text" value="Main Office Training Center"></div>
+    <div class="form-group"><label class="form-label">Address</label><input class="form-control" id="as-addr" type="text" placeholder="Street address…"></div>
+    <div class="form-group"><label class="form-label">Notes</label><textarea class="form-control" id="as-notes" rows="2" placeholder="Any special notes…"></textarea></div>
+    <div class="form-actions">
+      <button class="btn btn-outline" onclick="closeOverlay('ov-addsess')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitAddSession()">Create Session</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://dogqibgsezrjqfpublu.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_2NCGFW0wZzhaOjltNiJN1Q_0pJ4maCt';
+const ADMIN_PASS   = 'mss2026admin';
+
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+let isAdmin = false;
+let activeSession = null;
+
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('nav-' + page).classList.add('active');
+  if (page === 'home') loadSessions();
+  if (page === 'mysignups') { document.getElementById('search-input').value = ''; resetSearch(); }
+  if (page === 'admin' && isAdmin) loadAdminSessions();
+}
+
+async function loadSessions() {
+  const el = document.getElementById('home-sessions');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading sessions…</p></div>';
+  const today = new Date().toISOString().split('T')[0];
+  const { data, error } = await db.from('sessions').select('*, registrations(id)').gte('date', today).order('date');
+  if (error) { el.innerHTML = errHtml(error.message); return; }
+  if (!data || !data.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📅</div><h3>No upcoming sessions</h3><p>Check back soon.</p></div>'; return; }
+  el.innerHTML = '<div class="count-pill">📅 ' + data.length + ' session' + (data.length !== 1 ? 's' : '') + ' upcoming</div>' + data.map(buildCard).join('');
+}
+
+function buildCard(s) {
+  const reg = s.registrations?.length ?? 0;
+  const full = reg >= s.max_capacity;
+  const pct = Math.min(100, Math.round(reg / s.max_capacity * 100));
+  const fillCls = pct >= 100 ? 'hi' : pct >= 75 ? 'med' : '';
+  const d = new Date(s.date + 'T12:00:00');
+  const mo = d.toLocaleDateString('en-US', { month: 'short' });
+  const dd = d.getDate();
+  const dy = d.toLocaleDateString('en-US', { weekday: 'short' });
+  const trainers = [s.trainer1, s.trainer2].filter(Boolean).join(' & ');
+  return '<div class="session-card"><div class="session-card-row"><div class="date-col"><span class="mo">' + mo + '</span><span class="dd">' + dd + '</span><span class="dy">' + dy + '</span></div><div class="info-col"><h3>Safety Care Certification Training</h3><div class="meta-list"><span class="meta-item">⏰ ' + fmt(s.time_start) + ' – ' + fmt(s.time_end) + '</span><span class="meta-item">📍 ' + s.location + '</span>' + (trainers ? '<span class="meta-item">👤 ' + trainers + '</span>' : '') + (s.notes ? '<span class="meta-item">📝 ' + s.notes + '</span>' : '') + '</div><div class="card-footer"><div class="cap-wrap"><div class="cap-label">' + reg + ' / ' + s.max_capacity + ' registered</div><div class="cap-track"><div class="cap-fill ' + fillCls + '" style="width:' + pct + '%"></div></div></div>' + (full ? '<span class="badge badge-full">Full</span>' : '<button class="btn btn-primary btn-sm" onclick="openSignup(\'' + s.id + '\',\'' + s.date + '\',\'' + s.location + '\',' + s.max_capacity + ',' + reg + ')">Sign Up →</button>') + '</div></div></div></div>';
+}
+
+function openSignup(sid, date, loc, max, reg) {
+  if (reg >= max) return;
+  activeSession = { id: sid, max };
+  const d = new Date(date + 'T12:00:00');
+  document.getElementById('signup-info').textContent = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'}) + ' · ' + loc;
+  ['su-name','su-facility','su-cert'].forEach(id => { const el = document.getElementById(id); el.value = ''; el.classList.remove('err'); });
+  document.getElementById('su-err').style.display = 'none';
+  openOverlay('ov-signup');
+}
+
+async function submitSignup() {
+  const name = document.getElementById('su-name').value.trim();
+  const facility = document.getElementById('su-facility').value;
+  const cert = document.getElementById('su-cert').value;
+  let valid = true;
+  [['su-name', name], ['su-facility', facility], ['su-cert', cert]].forEach(([id, val]) => { const el = document.getElementById(id); if (!val) { el.classList.add('err'); valid = false; } else el.classList.remove('err'); });
+  if (!valid) { document.getElementById('su-err').style.display = 'block'; return; }
+  document.getElementById('su-err').style.display = 'none';
+  const btn = document.getElementById('su-submit');
+  btn.disabled = true; btn.textContent = 'Registering…';
+  const { count } = await db.from('registrations').select('id', { count: 'exact', head: true }).eq('session_id', activeSession.id);
+  if (count >= activeSession.max) { toast('Sorry — this session just filled up!', 'err'); btn.disabled = false; btn.textContent = '✓ Complete Registration'; closeOverlay('ov-signup'); loadSessions(); return; }
+  const { error } = await db.from('registrations').insert({ session_id: activeSession.id, full_name: name, facility, certification_status: cert });
+  btn.disabled = false; btn.textContent = '✓ Complete Registration';
+  if (error) { toast('Error: ' + error.message, 'err'); return; }
+  closeOverlay('ov-signup');
+  toast('🎉 You\'re registered! See you there!', 'ok');
+  loadSessions();
+}
+
+function resetSearch() { document.getElementById('search-results').innerHTML = '<div class="empty"><div class="empty-icon">🔍</div><h3>Search for your registration</h3><p>Type your name above to find your sign-ups</p></div>'; }
+
+let searchTimer;
+async function onSearch() {
+  clearTimeout(searchTimer);
+  const q = document.getElementById('search-input').value.trim();
+  if (q.length < 2) { resetSearch(); return; }
+  searchTimer = setTimeout(async () => {
+    const { data } = await db.from('registrations').select('*, sessions(date,time_start,location)').ilike('full_name', '%' + q + '%').order('registered_at', { ascending: false });
+    if (!data || !data.length) { document.getElementById('search-results').innerHTML = '<div class="empty"><div class="empty-icon">😕</div><h3>No results for "' + q + '"</h3><p>Double-check your name or ask your supervisor.</p></div>'; return; }
+    document.getElementById('search-results').innerHTML = data.map(r => {
+      const d = new Date(r.sessions.date + 'T12:00:00');
+      const ds = d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+      const attCls = r.attendance_status === 'Attended' ? 'badge-att' : r.attendance_status === 'No-Show' ? 'badge-noshow' : r.attendance_status === 'Cancelled' ? 'badge-can' : 'badge-reg';
+      return '<div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px"><div><div style="font-size:16px;font-weight:800;color:var(--navy)">' + r.full_name + '</div><div style="font-size:12.5px;color:var(--muted);margin-top:3px">' + r.facility + ' · ' + r.certification_status + '</div><div style="font-size:12.5px;margin-top:6px;font-weight:600">📅 ' + ds + '<br>📍 ' + r.sessions.location + '</div></div><span class="badge ' + attCls + '">' + (r.attendance_status || 'Registered') + '</span></div></div>';
+    }).join('');
+  }, 280);
+}
+
+function doLogin() {
+  if (document.getElementById('admin-pw').value === ADMIN_PASS) { isAdmin = true; document.getElementById('admin-login').style.display = 'none'; document.getElementById('admin-dash').style.display = 'block'; loadAdminSessions(); }
+  else { document.getElementById('login-err').style.display = 'block'; }
+}
+
+function doLogout() { isAdmin = false; document.getElementById('admin-login').style.display = 'block'; document.getElementById('admin-dash').style.display = 'none'; document.getElementById('admin-pw').value = ''; document.getElementById('login-err').style.display = 'none'; }
+
+async function loadAdminSessions() {
+  const el = document.getElementById('admin-sessions');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading…</p></div>';
+  const { data, error } = await db.from('sessions').select('*, registrations(id)').order('date');
+  if (error) { el.innerHTML = errHtml(error.message); return; }
+  if (!data || !data.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📅</div><h3>No sessions yet</h3><p>Add your first session above.</p></div>'; return; }
+  const today = new Date().toISOString().split('T')[0];
+  el.innerHTML = data.map(s => {
+    const reg = s.registrations?.length ?? 0;
+    const d = new Date(s.date + 'T12:00:00');
+    const ds = d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+    const trainers = [s.trainer1, s.trainer2].filter(Boolean).join(' & ');
+    const past = s.date < today;
+    return '<div class="card" style="opacity:' + (past ? '.65' : '1') + '"><div class="admin-sess-row"><div class="admin-sess-meta"><div class="admin-sess-date">' + ds + '</div><div class="admin-sess-sub">📍 ' + s.location + ' &nbsp;·&nbsp; ' + reg + '/' + s.max_capacity + ' registered' + (trainers ? ' &nbsp;·&nbsp; 👤 ' + trainers : '') + (past ? ' &nbsp;<em>(past)</em>' : '') + '</div></div><div class="admin-sess-actions"><button class="btn btn-primary btn-sm" onclick="viewRoster(\'' + s.id + '\')">📋 Roster</button><button class="btn btn-danger btn-sm" onclick="deleteSession(\'' + s.id + '\',\'' + ds + '\')">🗑</button></div></div></div>';
+  }).join('');
+}
+
+async function deleteSession(id, label) {
+  if (!confirm('Delete session: ' + label + '?\n\nAll registrations will be removed.')) return;
+  await db.from('registrations').delete().eq('session_id', id);
+  const { error } = await db.from('sessions').delete().eq('id', id);
+  if (error) { toast('Delete failed: ' + error.message, 'err'); return; }
+  toast('Session deleted.', 'ok'); loadAdminSessions();
+}
+
+async function viewRoster(sessionId) {
+  document.getElementById('admin-dash').style.display = 'none';
+  document.getElementById('roster-view').style.display = 'block';
+  document.getElementById('roster-content').innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading roster…</p></div>';
+  const [{ data: s }, { data: regs }] = await Promise.all([
+    db.from('sessions').select('*').eq('id', sessionId).single(),
+    db.from('registrations').select('*').eq('session_id', sessionId).order('registered_at')
+  ]);
+  const d = new Date(s.date + 'T12:00:00');
+  const dateStr = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const trainers = [s.trainer1, s.trainer2].filter(Boolean).join(' & ');
+  const attOpts = ['Registered','Attended','No-Show','Cancelled'];
+  const rows = regs && regs.length ? regs.map((r, i) => '<tr><td>' + (i+1) + '</td><td><strong>' + r.full_name + '</strong></td><td>' + r.facility + '</td><td>' + r.certification_status + '</td><td class="no-print"><select style="font-family:inherit;font-size:12px;padding:4px 8px;border:1.5px solid var(--border);border-radius:7px;background:#fafbfe;cursor:pointer" onchange="setAttendance(\'' + r.id + '\', this.value)">' + attOpts.map(o => '<option ' + ((r.attendance_status||'Registered')===o?'selected':'') + '>' + o + '</option>').join('') + '</select></td><td>' + new Date(r.registered_at).toLocaleDateString() + '</td><td class="no-print"><button class="btn btn-danger btn-sm" onclick="removeReg(\'' + r.id + '\',\'' + sessionId + '\')">✕</button></td></tr>').join('') : '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">No registrations yet</td></tr>';
+  document.getElementById('roster-content').innerHTML = '<div class="card"><div style="margin-bottom:16px"><div style="font-size:20px;font-weight:900;color:var(--navy)">Safety Care Certification Training</div><div style="font-size:13px;color:var(--muted);margin-top:6px;line-height:1.7;font-weight:500">📅 ' + dateStr + '<br>⏰ ' + fmt(s.time_start) + ' – ' + fmt(s.time_end) + '<br>📍 ' + s.location + (trainers ? '<br>👤 ' + trainers : '') + '</div></div><div class="divider"></div><div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:12px">' + (regs?.length ?? 0) + ' / ' + s.max_capacity + ' Registered</div><div class="tbl-wrap"><table><thead><tr><th>#</th><th>Name</th><th>Home / Facility</th><th>Cert Status</th><th>Attendance</th><th>Registered On</th><th class="no-print">Action</th></tr></thead><tbody>' + rows + '</tbody></table></div></div>';
+}
+
+async function setAttendance(regId, status) { const { error } = await db.from('registrations').update({ attendance_status: status }).eq('id', regId); if (error) toast('Update failed', 'err'); else toast('Attendance updated ✓', 'ok'); }
+async function removeReg(regId, sessionId) { if (!confirm('Remove this registration?')) return; await db.from('registrations').delete().eq('id', regId); toast('Registration removed.', 'ok'); viewRoster(sessionId); }
+function closeRoster() { document.getElementById('roster-view').style.display = 'none'; document.getElementById('admin-dash').style.display = 'block'; }
+
+function openAddSession() {
+  ['as-date','as-addr','as-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('as-cap').value = '20'; document.getElementById('as-tstart').value = '08:30'; document.getElementById('as-tend').value = '17:00'; document.getElementById('as-t1').value = ''; document.getElementById('as-t2').value = ''; document.getElementById('as-loc').value = 'Main Office Training Center';
+  openOverlay('ov-addsess');
+}
+
+async function submitAddSession() {
+  const date = document.getElementById('as-date').value;
+  const loc = document.getElementById('as-loc').value.trim();
+  const cap = parseInt(document.getElementById('as-cap').value);
+  if (!date || !loc || !cap) { toast('Fill in required fields.', 'err'); return; }
+  const { error } = await db.from('sessions').insert({ date, time_start: document.getElementById('as-tstart').value + ':00', time_end: document.getElementById('as-tend').value + ':00', trainer1: document.getElementById('as-t1').value || null, trainer2: document.getElementById('as-t2').value || null, location: loc, address: document.getElementById('as-addr').value || null, max_capacity: cap, notes: document.getElementById('as-notes').value || null });
+  if (error) { toast('Error: ' + error.message, 'err'); return; }
+  closeOverlay('ov-addsess'); toast('✅ Session created!', 'ok'); loadAdminSessions(); loadSessions();
+}
+
+function fmt(t) { if (!t) return ''; const [h, m] = t.split(':'); const hr = parseInt(h); return (hr % 12 || 12) + ':' + m + ' ' + (hr >= 12 ? 'PM' : 'AM'); }
+function openOverlay(id) { document.getElementById(id).classList.add('open'); }
+function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
+function closeIfBg(e, id) { if (e.target === document.getElementById(id)) closeOverlay(id); }
+function toast(msg, type) { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast show ' + (type||''); clearTimeout(t._timer); t._timer = setTimeout(() => t.classList.remove('show'), 3200); }
+function errHtml(msg) { return '<div class="empty"><div class="empty-icon">❌</div><h3>Something went wrong</h3><p>' + msg + '</p></div>'; }
+
+loadSessions();
+</script>
+</body>
+</html>
