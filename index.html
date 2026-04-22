@@ -188,9 +188,9 @@
     }
 
     main {
-        max-width: 860px;
+        max-width: 1060px;
         margin: 0 auto;
-        padding: 28px 20px 60px;
+        padding: 28px 24px 60px;
     }
 
     .tab-panel {
@@ -324,7 +324,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin: 26px 0 14px;
+        margin: 26px 0 16px;
     }
 
     .sessions-header h3 {
@@ -343,6 +343,24 @@
         font-weight: 800;
         padding: 3px 9px;
         border-radius: 50px;
+    }/* ── Grid card style ── */
+
+    .session-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+
+    @media (max-width: 780px) {
+        .session-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 500px) {
+        .session-grid {
+            grid-template-columns: 1fr;
+        }
     }
 
     .session-card {
@@ -350,11 +368,11 @@
         border-radius: var(--radius);
         box-shadow: var(--shadow-sm);
         border: 1px solid var(--gray-200);
-        display: flex;
-        align-items: stretch;
         overflow: hidden;
-        margin-bottom: 12px;
+        display: flex;
+        flex-direction: column;
         transition: box-shadow 0.2s, transform 0.2s;
+        cursor: pointer;
     }
 
     .session-card:hover {
@@ -362,97 +380,158 @@
         transform: translateY(-2px);
     }
 
-    .session-card.full {
-        opacity: 0.75;
+    .session-card.full .sc-signup-link {
+        color: var(--gray-400);
+        pointer-events: none;
     }
 
-    .date-block {
-        background: linear-gradient(160deg, var(--navy-mid), var(--navy));
-        color: #fff;
-        padding: 20px 18px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-width: 88px;
-        text-align: center;
+    .sc-header {
+        background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+        padding: 14px 16px;
     }
 
-    .date-month {
-        font-size: 11px;
+    .sc-category {
+        font-size: 10px;
         font-weight: 800;
         letter-spacing: 1.5px;
         text-transform: uppercase;
         color: var(--teal);
-        margin-bottom: 4px;
+        margin-bottom: 5px;
     }
 
-    .date-day {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 36px;
+    .sc-title {
+        font-size: 15px;
         font-weight: 900;
-        line-height: 1;
+        color: #fff;
+        line-height: 1.25;
     }
 
-    .date-weekday {
-        font-size: 11px;
-        font-weight: 700;
-        color: rgba(255, 255, 255, 0.5);
-        margin-top: 4px;
-        letter-spacing: 0.5px;
-    }
-
-    .session-info {
+    .sc-body {
+        padding: 14px 16px;
         flex: 1;
-        padding: 18px 20px;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        gap: 6px;
+        gap: 8px;
     }
 
-    .session-title {
-        font-size: 15px;
-        font-weight: 800;
-        color: var(--navy);
-    }
-
-    .session-meta {
+    .sc-detail {
         display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--gray-700);
+        line-height: 1.35;
     }
 
-    .meta-item {
-        font-size: 12.5px;
-        font-weight: 600;
-        color: var(--gray-600);
+    .sc-detail-icon {
+        font-size: 14px;
+        flex-shrink: 0;
+        margin-top: 1px;
+    }
+
+    .sc-footer {
+        padding: 12px 16px;
+        border-top: 1px solid var(--gray-100);
         display: flex;
         align-items: center;
-        gap: 5px;
+        justify-content: space-between;
     }
 
-    .session-trainers {
-        font-size: 12px;
-        font-weight: 700;
-        color: var(--navy-light);
-    }
-
-    .session-actions {
+    .sc-status {
         display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        justify-content: center;
-        gap: 10px;
-        padding: 18px 20px;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 800;
     }
+
+    .sc-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    .sc-dot.open {
+        background: #22c55e;
+    }
+
+    .sc-dot.full {
+        background: #ef4444;
+    }
+
+    .sc-dot.past {
+        background: var(--gray-400);
+    }
+
+    .sc-status.open {
+        color: #15803d;
+    }
+
+    .sc-status.full {
+        color: #dc2626;
+    }
+
+    .sc-status.past {
+        color: var(--gray-400);
+    }
+
+    .sc-signup-link {
+        font-size: 13px;
+        font-weight: 800;
+        color: var(--teal);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: color 0.15s;
+    }
+
+    .sc-signup-link:hover {
+        color: var(--teal-dark);
+    }
+
+    .sc-capacity-wrap {
+        padding: 0 16px 4px;
+    }
+
+    .sc-cap-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--gray-600);
+        margin-bottom: 5px;
+    }
+
+    .sc-bar {
+        height: 5px;
+        background: var(--gray-200);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .sc-fill {
+        height: 100%;
+        border-radius: 4px;
+        background: linear-gradient(90deg, var(--teal), var(--teal-dark));
+        transition: width 0.4s ease;
+    }
+
+    .sc-fill.warn {
+        background: linear-gradient(90deg, var(--amber), #d97706);
+    }
+
+    .sc-fill.danger {
+        background: linear-gradient(90deg, var(--red), #b91c1c);
+    }/* keep old names for non-session uses */
 
     .status-badge {
         font-size: 11px;
         font-weight: 800;
         padding: 4px 10px;
         border-radius: 50px;
-        letter-spacing: 0.3px;
     }
 
     .status-open {
@@ -1569,16 +1648,43 @@
             container.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><h3>No upcoming sessions</h3><p>Check back soon!</p></div>';
             return;
         }
-        container.innerHTML = upcoming.map(s => {
+        const cards = upcoming.map(s => {
             const regs = getSessionRegs(s.id),
                 count = regs.length,
                 cap = s.maxCapacity,
                 full = count >= cap;
             const pct = Math.min(Math.round((count / cap) * 100), 100);
             const barClass = pct >= 100 ? 'danger' : pct >= 75 ? 'warn' : '';
+            const spotsLeft = cap - count;
             const trainers = [s.trainer1, s.trainer2].filter(Boolean).join(' & ');
-            return `<div class="session-card${full ? ' full' : ''}"><div class="date-block"><div class="date-month">${getMonth(s.date)}</div><div class="date-day">${getDay(s.date)}</div><div class="date-weekday">${getWday(s.date)}</div></div><div class="session-info"><div class="session-title">Safety Care Certification Training</div><div class="session-meta"><span class="meta-item">⏰ ${s.time}</span><span class="meta-item">📍 ${s.location}</span></div>${trainers ? `<div class="session-trainers">🧑‍🏫 ${trainers}</div>` : ''} ${s.notes ? `<div class="meta-item" style="font-style:italic">📝 ${s.notes}</div>` : ''}<div class="capacity-bar-wrap"><div class="capacity-bar"><div class="capacity-fill ${barClass}" style="width:${pct}%"></div></div></div></div><div class="session-actions"><span class="status-badge ${full ? 'status-full' : 'status-open'}">${full ? 'Full' : 'Open'}</span><span class="capacity-text">${count} / ${cap} registered</span><button class="btn btn-primary btn-sm" onclick="openModal('${s.id}')" ${full ? 'disabled' : ''} >${full ? '⛔ Full' : 'Sign Up →'}</button></div></div>`;
+            const statusClass = full ? 'full' : 'open';
+            const statusLabel = full ? 'Full' : 'Open';
+            const signupPart = full
+            ? `<span class="sc-signup-link" style="color:var(--gray-400);cursor:default">⛔ Full</span>`
+            : `<a class="sc-signup-link" onclick="openModal('${s.id}')">Sign Up →</a>`;
+            return `<div class="session-card${full ? ' full' : ''}">
+                    <div class="sc-header">
+                      <div class="sc-category">Safety Care</div>
+                      <div class="sc-title">Safety Care Certification Training</div>
+                    </div>
+                    <div class="sc-body">
+                      <div class="sc-detail"><span class="sc-detail-icon">📅</span><span>${formatDateFull(s.date)}</span></div>
+                      <div class="sc-detail"><span class="sc-detail-icon">⏰</span><span>${s.time}</span></div>
+                      <div class="sc-detail"><span class="sc-detail-icon">📍</span><span>${s.location}</span></div>
+                      ${trainers ? `<div class="sc-detail"><span class="sc-detail-icon">🧑‍🏫</span><span>${trainers}</span></div>` : ''}
+                      ${s.notes ? `<div class="sc-detail"><span class="sc-detail-icon">📝</span><span style="font-style:italic">${s.notes}</span></div>` : ''}
+                    </div>
+                    <div class="sc-capacity-wrap">
+                      <div class="sc-cap-row"><span>${count} / ${cap} registered</span><span>${spotsLeft} spot${spotsLeft !== 1 ? 's' : ''} left</span></div>
+                      <div class="sc-bar"><div class="sc-fill ${barClass}" style="width:${pct}%"></div></div>
+                    </div>
+                    <div class="sc-footer">
+                      <div class="sc-status ${statusClass}"><span class="sc-dot ${statusClass}"></span>${statusLabel}</div>
+                      ${signupPart}
+                    </div>
+                  </div>`;
         }).join('');
+        container.innerHTML = `<div class="session-grid">${cards}</div>`;
     }
     function openModal(sid) {
         activeSessionId = sid;
@@ -1811,4 +1917,3 @@
     </script>
 </body>
 </html>
-
