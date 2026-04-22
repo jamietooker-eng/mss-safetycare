@@ -1221,21 +1221,236 @@
             flex-direction: column;
         }
 
-        .date-block {
-            flex-direction: row;
-            gap: 12px;
-            padding: 14px 20px;
-        }
-
-        .date-day {
-            font-size: 28px;
-        }
-
         .session-actions {
             flex-direction: row;
             padding: 0 18px 18px;
             justify-content: space-between;
         }
+    }/* ── Roster v2 ── */
+
+    .roster-meta {
+        margin-bottom: 12px;
+    }
+
+    .roster-meta h4 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 17px;
+        font-weight: 900;
+        color: var(--navy);
+    }
+
+    .roster-meta p {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--gray-600);
+        margin-top: 2px;
+    }
+
+    .roster-cap-bar {
+        height: 6px;
+        background: var(--gray-200);
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 8px 0 4px;
+    }
+
+    .roster-cap-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--teal), var(--teal-dark));
+        border-radius: 4px;
+        transition: width 0.4s;
+    }
+
+    .roster-cap-fill.warn {
+        background: linear-gradient(90deg, var(--amber), #d97706);
+    }
+
+    .roster-cap-fill.danger {
+        background: linear-gradient(90deg, var(--red), #b91c1c);
+    }
+
+    .roster-cap-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--gray-600);
+        margin-bottom: 14px;
+    }
+
+    .roster-actions-bar {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+        align-items: center;
+    }
+
+    .btn-mark-all {
+        background: #f0fdf4;
+        color: #15803d;
+        border: 2px solid #bbf7d0;
+        font-family: 'Nunito', sans-serif;
+        font-weight: 800;
+        font-size: 13px;
+        border-radius: var(--radius-sm);
+        padding: 7px 14px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+
+    .btn-mark-all:hover {
+        background: #dcfce7;
+    }
+
+    .btn-clear-all {
+        background: #f8fafc;
+        color: var(--gray-700);
+        border: 2px solid var(--gray-200);
+        font-family: 'Nunito', sans-serif;
+        font-weight: 800;
+        font-size: 13px;
+        border-radius: var(--radius-sm);
+        padding: 7px 14px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+
+    .btn-clear-all:hover {
+        background: var(--gray-100);
+    }
+
+    .btn-lock {
+        background: #fef3c7;
+        color: #92400e;
+        border: 2px solid #fde68a;
+        font-family: 'Nunito', sans-serif;
+        font-weight: 800;
+        font-size: 13px;
+        border-radius: var(--radius-sm);
+        padding: 7px 14px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+        margin-left: auto;
+    }
+
+    .btn-lock:hover {
+        background: #fde68a;
+    }
+
+    .btn-lock.locked {
+        background: #fee2e2;
+        color: #dc2626;
+        border-color: #fecaca;
+    }
+
+    .locked-banner {
+        background: #fef3c7;
+        border: 1px solid #fde68a;
+        border-radius: var(--radius-sm);
+        padding: 10px 16px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #92400e;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .toggle {
+        position: relative;
+        width: 40px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        position: absolute;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        inset: 0;
+        background: var(--gray-200);
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .toggle-slider::before {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        left: 3px;
+        top: 3px;
+        background: #fff;
+        border-radius: 50%;
+        transition: transform 0.2s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle input:checked + .toggle-slider {
+        background: #22c55e;
+    }
+
+    .toggle input:checked + .toggle-slider::before {
+        transform: translateX(18px);
+    }
+
+    .toggle-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .toggle-yes {
+        font-size: 12px;
+        font-weight: 800;
+        color: #15803d;
+    }
+
+    .toggle-no {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--gray-400);
+    }
+
+    .open-slot-row td {
+        color: var(--gray-300);
+        font-style: italic;
+        font-size: 13px;
+        padding: 10px 16px;
+    }
+
+    .add-staff-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(9, 20, 42, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 2000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .add-staff-overlay.open {
+        display: flex;
+        animation: fadeIn 0.2s ease;
     }
     </style>
 </head>
@@ -1416,6 +1631,14 @@
                         <button class="btn btn-outline btn-sm" onclick="printRoster()">🖨️ Print Roster</button>
                     </div>
                     <div class="print-header" id="print-header"></div>
+                    <div class="roster-meta" id="roster-meta"></div>
+                    <div id="locked-banner" class="locked-banner" style="display:none">🔒 This session is locked. Registrations are closed and attendance is finalized.</div>
+                    <div class="roster-actions-bar">
+                        <button class="btn-mark-all" onclick="markAllAttended()">✓ Mark All Attended</button>
+                        <button class="btn-clear-all" onclick="clearAllAttended()">✕ Clear All</button>
+                        <button class="btn btn-primary btn-sm" onclick="openAddStaff()">+ Add Staff</button>
+                        <button class="btn-lock" id="lock-btn" onclick="toggleLock()">🔒 Lock Session</button>
+                    </div>
                     <div class="roster-table-wrap">
                         <table>
                             <thead>
@@ -1423,8 +1646,9 @@
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Home / Facility</th>
-                                    <th>Status</th>
-                                    <th>Registered On</th>
+                                    <th>Cert</th>
+                                    <th>Registered</th>
+                                    <th>Attended</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -1502,6 +1726,73 @@
         </div>
     </div>
     <div class="toast-container" id="toast-container"></div>
+
+    <!-- Add Staff Modal -->
+    <div class="add-staff-overlay" id="add-staff-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>+ Add Staff to Roster</h3>
+                <p id="add-staff-session-label">Manually add a staff member</p>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>
+                        Full Name 
+                        <span style="color:var(--red)">*</span>
+                    </label>
+                    <input type="text" id="as-name" placeholder="Staff member's full name…"/>
+                    <p class="form-error" id="as-err-name">Please enter a name.</p>
+                </div>
+                <div class="form-group">
+                    <label>
+                        Home / Facility 
+                        <span style="color:var(--red)">*</span>
+                    </label>
+                    <select id="as-facility">
+                        <option value="">— Select facility —</option>
+                        <option>PKV</option>
+                        <option>BV</option>
+                        <option>Cherokee</option>
+                        <option>Cheyenne</option>
+                        <option>CH</option>
+                        <option>Lawton</option>
+                        <option>Leech</option>
+                        <option>Maple View</option>
+                        <option>Marshall</option>
+                        <option>MWC</option>
+                        <option>Southgate</option>
+                        <option>So Maple</option>
+                        <option>Pinnacle</option>
+                        <option>Royce</option>
+                        <option>Wescott</option>
+                        <option>SH Apts</option>
+                        <option>SH Duplex</option>
+                        <option>St. Mary's</option>
+                        <option>Stone Ridge</option>
+                        <option>Riverside</option>
+                        <option>Mulberry</option>
+                    </select>
+                    <p class="form-error" id="as-err-facility">Please select a facility.</p>
+                </div>
+                <div class="form-group">
+                    <label>
+                        Certification Status 
+                        <span style="color:var(--red)">*</span>
+                    </label>
+                    <select id="as-cert">
+                        <option value="">— Select status —</option>
+                        <option>Initial</option>
+                        <option>Recertification</option>
+                    </select>
+                    <p class="form-error" id="as-err-cert">Please select a status.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeAddStaff()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitAddStaff()">Add to Roster</button>
+            </div>
+        </div>
+    </div>
     <footer>
         <span>Mid-Step Services</span>
          — Safety Care Certification Training Portal © 2026 &nbsp;·&nbsp; Sioux City, Iowa
@@ -1652,7 +1943,7 @@
             const regs = getSessionRegs(s.id),
                 count = regs.length,
                 cap = s.maxCapacity,
-                full = count >= cap;
+                full = count >= cap || s.locked;
             const pct = Math.min(Math.round((count / cap) * 100), 100);
             const barClass = pct >= 100 ? 'danger' : pct >= 75 ? 'warn' : '';
             const spotsLeft = cap - count;
@@ -1806,8 +2097,9 @@
         }
         container.innerHTML = allSessions.map(s => {
             const regs = getSessionRegs(s.id),
-                trainers = [s.trainer1, s.trainer2].filter(Boolean).join(' & ');
-            return `<div class="admin-session-card"><div class="admin-session-info"><h4>📅 ${formatDateFull(s.date)}</h4><p>⏰ ${s.time} &nbsp;·&nbsp; 📍 ${s.location} &nbsp;·&nbsp; 👥 ${regs.length}/${s.maxCapacity} registered${trainers ? ' &nbsp;·&nbsp; 🧑‍🏫 ' + trainers : ''}</p>${s.notes ? `<p style="font-style:italic;margin-top:4px">📝 ${s.notes}</p>` : ''}</div><div class="admin-session-actions"><button class="btn btn-primary btn-sm" onclick="openRoster('${s.id}')">📋 View Roster</button><button class="btn btn-danger btn-sm" onclick="deleteSession('${s.id}')">🗑️ Delete</button></div></div>`;
+                trainers = [s.trainer1, s.trainer2].filter(Boolean).join(' & '),
+                locked = s.locked || false;
+            return `<div class="admin-session-card"><div class="admin-session-info"><h4>${locked ? '🔒 ' : '📅 '}${formatDateFull(s.date)}${locked ? ' <span style="font-size:11px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:50px;font-weight:800;margin-left:6px;">LOCKED</span>' : ''}</h4><p>⏰ ${s.time} &nbsp;·&nbsp; 📍 ${s.location} &nbsp;·&nbsp; 👥 ${regs.length}/${s.maxCapacity} registered${trainers ? ' &nbsp;·&nbsp; 🧑‍🏫 ' + trainers : ''}</p>${s.notes ? `<p style="font-style:italic;margin-top:4px">📝 ${s.notes}</p>` : ''}</div><div class="admin-session-actions"><button class="btn btn-primary btn-sm" onclick="openRoster('${s.id}')">📋 View Roster</button><button class="btn btn-danger btn-sm" onclick="deleteSession('${s.id}')">🗑️ Delete</button></div></div>`;
         }).join('');
     }
     async function deleteSession(sid) {
@@ -1871,14 +2163,164 @@
         renderRosterTable(sid);
     }
     function renderRosterTable(sid) {
+        const s = allSessions.find(x => x.id === sid);
         const regs = getSessionRegs(sid);
+        const cap = s?.maxCapacity || 20;
+        const count = regs.length;
+        const pct = Math.min(Math.round((count / cap) * 100), 100);
+        const barClass = pct >= 100 ? 'danger' : pct >= 75 ? 'warn' : '';
+        const spotsLeft = Math.max(cap - count, 0);
+        const locked = s?.locked || false;
+        // Roster meta bar
+        document.getElementById('roster-meta').innerHTML = `
+              <h4>Roster — ${count} / ${cap} registered</h4>
+              <div class="roster-cap-bar"><div class="roster-cap-fill ${barClass}" style="width:${pct}%"></div></div>
+              <div class="roster-cap-labels"><span>${count} registered</span><span>${spotsLeft} open</span></div>`;
+        // Lock banner + button
+        const lockedBanner = document.getElementById('locked-banner');
+        const lockBtn = document.getElementById('lock-btn');
+        if (locked) {
+            lockedBanner.style.display = 'flex';
+            lockBtn.textContent = '🔓 Unlock Session';
+            lockBtn.classList.add('locked');
+        } else {
+            lockedBanner.style.display = 'none';
+            lockBtn.textContent = '🔒 Lock Session';
+            lockBtn.classList.remove('locked');
+        }
         const tbody = document.getElementById('roster-tbody');
-        if (regs.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--gray-400);font-weight:700">No registrations yet.</td></tr>';
+        // Registered rows
+        const regRows = regs.map((r, i) => {
+            const attended = r.attended || false;
+            const toggleId = `att-${r.id}`;
+            const disabledAttr = locked ? 'disabled' : '';
+            return `<tr>
+                    <td>${i + 1}</td>
+                    <td class="td-name">${r.name}</td>
+                    <td>${r.facility}</td>
+                    <td><span class="td-cert ${r.cert === 'Initial' ? 'cert-initial' : 'cert-recert'}">${r.cert}</span></td>
+                    <td>${r.registeredOn || '—'}</td>
+                    <td>
+                      <div class="toggle-wrap">
+                        <label class="toggle"><input type="checkbox" id="${toggleId}" ${attended ? 'checked' : ''} ${disabledAttr} onchange="toggleAttendance('${r.id}',this.checked)"/><span class="toggle-slider"></span></label>
+                        <span class="${attended ? 'toggle-yes' : 'toggle-no'}" id="lbl-${r.id}">${attended ? 'Yes' : 'No'}</span>
+                      </div>
+                    </td>
+                    <td>${locked ? '—' : `<button class="btn btn-danger btn-sm" onclick="removeFromRoster('${r.id}')">Remove</button>`}</td>
+                  </tr>`;
+        }).join('');
+        // Open slot rows
+        const openRows = Array.from({
+            length: spotsLeft
+        }, (_, i) => `<tr class="open-slot-row"><td>${count + i + 1}</td><td colspan="6">Open slot</td></tr>`).join('');
+        tbody.innerHTML = regRows + openRows;
+    }
+    async function toggleAttendance(regId, attended) {
+        try {
+            await db.collection('registrations').doc(regId).update({
+                attended
+            });
+            const lbl = document.getElementById('lbl-' + regId);
+            if (lbl) {
+                lbl.textContent = attended ? 'Yes' : 'No';
+                lbl.className = attended ? 'toggle-yes' : 'toggle-no';
+            }
+        } catch (err) {
+            showToast('❌ Error updating attendance.', 'error');
+        }
+    }
+    async function markAllAttended() {
+        const regs = getSessionRegs(currentRosterSessionId);
+        const batch = db.batch();
+        regs.forEach(r => batch.update(db.collection('registrations').doc(r.id), {
+            attended: true
+        }));
+        try {
+            await batch.commit();
+            showToast('✅ All marked as attended!', 'success');
+        }
+        catch (err) {
+            showToast('❌ Error updating.', 'error');
+        }
+    }
+    async function clearAllAttended() {
+        const regs = getSessionRegs(currentRosterSessionId);
+        const batch = db.batch();
+        regs.forEach(r => batch.update(db.collection('registrations').doc(r.id), {
+            attended: false
+        }));
+        try {
+            await batch.commit();
+            showToast('Attendance cleared.', 'success');
+        }
+        catch (err) {
+            showToast('❌ Error updating.', 'error');
+        }
+    }
+    async function toggleLock() {
+        const s = allSessions.find(x => x.id === currentRosterSessionId);
+        const newLocked = !(s?.locked || false);
+        const msg = newLocked ? 'Lock this session? Staff will no longer be able to register.' : 'Unlock this session?';
+        if (!confirm(msg))
+            return;
+        try {
+            await db.collection('sessions').doc(currentRosterSessionId).update({
+                locked: newLocked
+            });
+            showToast(newLocked ? '🔒 Session locked!' : '🔓 Session unlocked!', 'success');
+        } catch (err) {
+            showToast('❌ Error updating session.', 'error');
+        }
+    }
+    function openAddStaff() {
+        const s = allSessions.find(x => x.id === currentRosterSessionId);
+        document.getElementById('add-staff-session-label').textContent = s ? formatDateFull(s.date) : '';
+        document.getElementById('as-name').value = '';
+        document.getElementById('as-facility').value = '';
+        document.getElementById('as-cert').value = '';
+        ['as-err-name', 'as-err-facility', 'as-err-cert'].forEach(id => document.getElementById(id).classList.remove('show'));
+        document.getElementById('add-staff-overlay').classList.add('open');
+    }
+    function closeAddStaff() {
+        document.getElementById('add-staff-overlay').classList.remove('open');
+    }
+    async function submitAddStaff() {
+        const name = document.getElementById('as-name').value.trim();
+        const facility = document.getElementById('as-facility').value;
+        const cert = document.getElementById('as-cert').value;
+        document.getElementById('as-err-name').classList.toggle('show', !name);
+        document.getElementById('as-err-facility').classList.toggle('show', !facility);
+        document.getElementById('as-err-cert').classList.toggle('show', !cert);
+        if (!name || !facility || !cert)
+            return;
+        if (allRegistrations.find(r => r.sessionId === currentRosterSessionId && r.name.toLowerCase() === name.toLowerCase())) {
+            showToast('⚠️ ' + name + ' is already on this roster.', 'error');
             return;
         }
-        tbody.innerHTML = regs.map((r, i) => `<tr><td>${i + 1}</td><td class="td-name">${r.name}</td><td>${r.facility}</td><td><span class="td-cert ${r.cert === 'Initial' ? 'cert-initial' : 'cert-recert'}">${r.cert}</span></td><td>${r.registeredOn || '—'}</td><td><button class="btn btn-danger btn-sm" onclick="removeFromRoster('${r.id}')">Remove</button></td></tr>`).join('');
+        try {
+            await db.collection('registrations').add({
+                sessionId: currentRosterSessionId,
+                name,
+                facility,
+                cert,
+                registeredOn: new Date().toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                }),
+                attended: false,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            closeAddStaff();
+            showToast('✅ ' + name + ' added to roster!', 'success');
+        } catch (err) {
+            showToast('❌ Error adding staff.', 'error');
+        }
     }
+    document.getElementById('add-staff-overlay').addEventListener('click', function(e) {
+        if (e.target === this)
+            closeAddStaff();
+    });
     async function removeFromRoster(regId) {
         if (!confirm('Remove this person?'))
             return;
