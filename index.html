@@ -1004,7 +1004,8 @@
         margin-top: 4px;
     }
 
-    .admin-session-actions {
+    .admin-trainer-row{display:flex;gap:12px;padding:10px 22px 14px;background:#f8fafc;border-top:1px solid #e2e8f0;flex-wrap:wrap;align-items:flex-end;}.admin-trainer-row label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1a3a5e;display:block;margin-bottom:4px;}.admin-trainer-row select{padding:7px 10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:13px;background:#fff;cursor:pointer;min-width:140px;}.trainer-saved-lbl{font-size:11px;color:#16a34a;font-weight:700;opacity:0;transition:opacity .3s;align-self:center;}.trainer-saved-lbl.show{opacity:1;}
+.admin-session-actions {
         display: flex;
         gap: 8px;
         flex-wrap: wrap;
@@ -2086,7 +2087,8 @@
         document.getElementById('admin-login-box').style.display = 'block';
         document.getElementById('admin-pw-input').value = '';
     }
-    function renderAdminSessions() {
+    async function saveTrainers(sid){const TLIST=['Lola','Joann','Thomas','Tammy','Harley','Leslie','Jaedyn','Lauren'];const t1=document.getElementById('tr1-'+sid)?.value||'';const t2=document.getElementById('tr2-'+sid)?.value||'';try{await db.collection('sessions').doc(sid).update({trainer1:t1,trainer2:t2});const i=allSessions.findIndex(s=>s.id===sid);if(i>=0){allSessions[i].trainer1=t1;allSessions[i].trainer2=t2;}const el=document.getElementById('trsaved-'+sid);if(el){el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2000);}}catch(e){console.error('saveTrainers:',e);}}
+function renderAdminSessions() {
         if (!adminAuthed)
             return;
         closeRoster();
@@ -2099,7 +2101,7 @@
             const regs = getSessionRegs(s.id),
                 trainers = [s.trainer1, s.trainer2].filter(Boolean).join(' & '),
                 locked = s.locked || false;
-            return `<div class="admin-session-card"><div class="admin-session-info"><h4>${locked ? '🔒 ' : '📅 '}${formatDateFull(s.date)}${locked ? ' <span style="font-size:11px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:50px;font-weight:800;margin-left:6px;">LOCKED</span>' : ''}</h4><p>⏰ ${s.time} &nbsp;·&nbsp; 📍 ${s.location} &nbsp;·&nbsp; 👥 ${regs.length}/${s.maxCapacity} registered${trainers ? ' &nbsp;·&nbsp; 🧑‍🏫 ' + trainers : ''}</p>${s.notes ? `<p style="font-style:italic;margin-top:4px">📝 ${s.notes}</p>` : ''}</div><div class="admin-session-actions"><button class="btn btn-primary btn-sm" onclick="openRoster('${s.id}')">📋 View Roster</button><button class="btn btn-danger btn-sm" onclick="deleteSession('${s.id}')">🗑️ Delete</button></div></div>`;
+            return `<div class="admin-session-card"><div class="admin-session-info"><h4>${locked ? '🔒 ' : '📅 '}${formatDateFull(s.date)}${locked ? ' <span style="font-size:11px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:50px;font-weight:800;margin-left:6px;">LOCKED</span>' : ''}</h4><p>⏰ ${s.time} &nbsp;·&nbsp; 📍 ${s.location} &nbsp;·&nbsp; 👥 ${regs.length}/${s.maxCapacity} registered${trainers ? ' &nbsp;·&nbsp; 🧑‍🏫 ' + trainers : ''}</p>${s.notes ? `<p style="font-style:italic;margin-top:4px">📝 ${s.notes}</p>` : ''}</div><div class="admin-session-actions"><button class="btn btn-primary btn-sm" onclick="openRoster('${s.id}')">📋 View Roster</button><button class="btn btn-danger btn-sm" onclick="deleteSession('${s.id}')">🗑️ Delete</button></div><div class="admin-trainer-row"><div><label>Trainer 1</label><select id="tr1-${s.id}" onchange="saveTrainers('${s.id}')"><option value="">— Unassigned —</option><option${s.trainer1==="Lola"?" selected":""}>Lola</option><option${s.trainer1==="Joann"?" selected":""}>Joann</option><option${s.trainer1==="Thomas"?" selected":""}>Thomas</option><option${s.trainer1==="Tammy"?" selected":""}>Tammy</option><option${s.trainer1==="Harley"?" selected":""}>Harley</option><option${s.trainer1==="Leslie"?" selected":""}>Leslie</option><option${s.trainer1==="Jaedyn"?" selected":""}>Jaedyn</option><option${s.trainer1==="Lauren"?" selected":""}>Lauren</option></select></div><div><label>Trainer 2</label><select id="tr2-${s.id}" onchange="saveTrainers('${s.id}')"><option value="">— Unassigned —</option><option${s.trainer2==="Lola"?" selected":""}>Lola</option><option${s.trainer2==="Joann"?" selected":""}>Joann</option><option${s.trainer2==="Thomas"?" selected":""}>Thomas</option><option${s.trainer2==="Tammy"?" selected":""}>Tammy</option><option${s.trainer2==="Harley"?" selected":""}>Harley</option><option${s.trainer2==="Leslie"?" selected":""}>Leslie</option><option${s.trainer2==="Jaedyn"?" selected":""}>Jaedyn</option><option${s.trainer2==="Lauren"?" selected":""}>Lauren</option></select></div><span class="trainer-saved-lbl" id="trsaved-${s.id}">✓ Saved</span></div></div>`;
         }).join('');
     }
     async function deleteSession(sid) {
