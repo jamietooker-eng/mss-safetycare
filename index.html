@@ -11,9 +11,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <style>
     :root {
-        --navy: #0d1f3c;
-        --navy-mid: #1a3560;
-        --navy-light: #254a84;
+        --navy: #1e73be;
+        --navy-mid: #1a65a8;
+        --navy-light: #2585d4;
         --teal: #00bdb4;
         --teal-dark: #009990;
         --teal-glow: rgba(0, 189, 180, 0.18);
@@ -52,7 +52,7 @@
     }
 
     header {
-        background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, var(--navy-light) 100%);
+        background: linear-gradient(135deg, #1a65a8 0%, #1e73be 50%, #2585d4 100%);
         position: sticky;
         top: 0;
         z-index: 100;
@@ -74,39 +74,42 @@
     }
 
     .brand-logo {
-        width: 48px;
         height: 48px;
-        background: linear-gradient(135deg, var(--teal), var(--teal-dark));
-        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 22px;
-        box-shadow: 0 0 16px rgba(0, 189, 180, 0.4);
         flex-shrink: 0;
+    }
+
+    .brand-logo img {
+        height: 48px;
+        width: auto;
+        display: block;
+        filter: brightness(0) invert(1);
     }
 
     .brand-text h1 {
         font-family: 'Montserrat', sans-serif;
         font-size: 19px;
         font-weight: 900;
-        color: #fff;
+        color: #000;
         letter-spacing: -0.3px;
         line-height: 1.1;
+        text-shadow: none;
     }
 
     .brand-text p {
         font-size: 11px;
-        color: rgba(255, 255, 255, 0.55);
-        font-weight: 600;
+        color: rgba(0, 0, 0, 0.65);
+        font-weight: 700;
         letter-spacing: 0.5px;
         text-transform: uppercase;
         margin-top: 2px;
     }
 
     .header-badge {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(0, 0, 0, 0.2);
         border-radius: 50px;
         padding: 6px 14px;
         display: flex;
@@ -117,7 +120,7 @@
     .header-badge span {
         font-size: 12px;
         font-weight: 700;
-        color: rgba(255, 255, 255, 0.8);
+        color: #000;
     }
 
     .live-dot {
@@ -151,7 +154,7 @@
         flex: 1;
         background: none;
         border: none;
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(0, 0, 0, 0.5);
         font-family: 'Nunito', sans-serif;
         font-size: 13px;
         font-weight: 700;
@@ -180,7 +183,7 @@
     }
 
     .tab-btn.active {
-        color: #fff;
+        color: #000;
     }
 
     .tab-btn.active::after {
@@ -1459,11 +1462,10 @@
     <header>
         <div class="header-top">
             <div class="brand">
-                <div class="brand-logo">🛡️</div>
-                <div class="brand-text">
-                    <h1>Mid-Step Services</h1>
-                    <p>Enhancing Abilities… Enriching Lives</p>
+                <div class="brand-logo">
+                    <img src="https://www.midstepservices.com/wp-content/uploads/2026/04/Web-Logo-2026.png" alt="Mid-Step Services Logo"/>
                 </div>
+
             </div>
             <div class="header-badge">
                 <span class="live-dot"></span>
